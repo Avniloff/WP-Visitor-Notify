@@ -231,10 +231,7 @@ class Plugin {
         if (null === $this->database) {
             $this->database = new Database();
             
-            // Set database reference in logger for database logging
-            if ($this->logger !== null) {
-                $this->logger->set_database($this->database);
-            }
+            // Logger is now independent - no database dependency needed
             
             // Ensure tables exist on first load
             if (!$this->database->tables_exist()) {
@@ -244,7 +241,7 @@ class Plugin {
                 }
             }
         }
-    }    /**
+    }/**
      * Initialize device/browser detector
      * TODO: Создадим когда будем готовы
      *
