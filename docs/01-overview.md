@@ -143,4 +143,3 @@
 ---
 
 *Documentation created through complete analysis of 1,921 lines of WordPress plugin code. All information verified against actual implementation.*
-

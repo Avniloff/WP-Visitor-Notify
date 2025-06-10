@@ -115,4 +115,3 @@ function wpvn_deactivate(): void {
 // Uninstall hook
 // Срабатывает при полном удалении плагина - удаляем ВСЕ данные
 register_uninstall_hook(__FILE__, ['WPVN\Uninstaller', 'uninstall']);
-

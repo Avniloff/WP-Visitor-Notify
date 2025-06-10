@@ -214,4 +214,3 @@ try {
 ---
 
 *Based on analysis of 1,921 lines of actual plugin code*
-

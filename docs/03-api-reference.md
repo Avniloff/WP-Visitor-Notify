@@ -231,4 +231,3 @@ $logger = $plugin->get_component('logger');
 ---
 
 *All method signatures verified against actual code implementation*
-
