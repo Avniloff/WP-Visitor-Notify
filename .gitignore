@@ -36,9 +36,13 @@ pids
 *.seed
 *.pid.lock
 
-# Docker
+# Docker & Development Environment
 .docker/
+docker-compose.yml
 docker-compose.override.yml
+Dockerfile
+apache-config.conf
+xdebug.ini
 .env.docker
 
 # Backup files
