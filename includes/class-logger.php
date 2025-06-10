@@ -26,10 +26,8 @@ if (!defined('ABSPATH')) {
  *
  * @since 1.0.0
  */
-class Logger {
-
-    /**
-     * Log levels (PSR-3 standard)
+class Logger {    /**
+     * Log levels (simplified for practical use)
      *
      * @since 1.0.0
      * @var array<string>
@@ -37,9 +35,7 @@ class Logger {
     private const LOG_LEVELS = [
         'debug',     // Detailed debug information
         'info',      // Interesting events
-        'warning',   // Exceptional occurrences that are not errors
-        'error',     // Runtime errors that do not require immediate action
-        'critical'   // Critical conditions requiring immediate attention
+        'error'      // Runtime errors that do not require immediate action
     ];
 
     /**
@@ -71,7 +67,7 @@ class Logger {
      *
      * @since 1.0.0
      * @param string $message Log message
-     * @param string $level Log level (debug, info, warning, error, critical)
+     * @param string $level Log level (debug, info, error)
      * @param array $context Additional context data
      * @param string|null $component Component name that generated the log
      * @return bool Always returns true
@@ -118,22 +114,7 @@ class Logger {
      */
     public function info(string $message, array $context = [], ?string $component = null): bool {
         return $this->log($message, 'info', $context, $component);
-    }
-
-    /**
-     * Log warning level message
-     *
-     * @since 1.0.0
-     * @param string $message Log message
-     * @param array $context Additional context
-     * @param string|null $component Component name
-     * @return bool Success status
-     */
-    public function warning(string $message, array $context = [], ?string $component = null): bool {
-        return $this->log($message, 'warning', $context, $component);
-    }
-
-    /**
+    }    /**
      * Log error level message
      *
      * @since 1.0.0
@@ -144,22 +125,7 @@ class Logger {
      */
     public function error(string $message, array $context = [], ?string $component = null): bool {
         return $this->log($message, 'error', $context, $component);
-    }
-
-    /**
-     * Log critical level message
-     *
-     * @since 1.0.0
-     * @param string $message Log message
-     * @param array $context Additional context
-     * @param string|null $component Component name
-     * @return bool Success status
-     */
-    public function critical(string $message, array $context = [], ?string $component = null): bool {
-        return $this->log($message, 'critical', $context, $component);
-    }
-
-    /**
+    }    /**
      * Check if a log level should be recorded
      *
      * @since 1.0.0
