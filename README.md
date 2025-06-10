@@ -135,3 +135,4 @@ Future classes to be implemented:
 ---
 
 **Made with ❤️ for the WordPress community**
+
