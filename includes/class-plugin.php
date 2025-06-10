@@ -427,13 +427,9 @@ class Plugin {
      * @since 1.0.0
      * @param string $hook The current admin page hook
      * @return void
-     */
-    public function enqueue_admin_assets(string $hook): void {
+     */    public function enqueue_admin_assets(string $hook): void {
         // TODO: Добавим когда создадим CSS/JS файлы
-        // Пока просто логируем что метод вызвался
-        if (\str_contains($hook, self::PLUGIN_SLUG)) {
-            $this->logger->log('Admin assets hook called', 'debug', ['hook' => $hook]);
-        }
+        // Method ready for asset enqueuing when needed
     }
 
     /**
@@ -442,11 +438,10 @@ class Plugin {
      *
      * @since 1.0.0
      * @return void
-     */
-    public function register_settings(): void {
+     */    public function register_settings(): void {
         // TODO: Добавим настройки позже
-        $this->logger->log('Settings registration called', 'debug');
-    }    /**
+        // Method ready for WordPress Settings API integration
+    }/**
      * TODO: Методы настроек - добавим позже когда будем готовы
      */
     
@@ -482,8 +477,7 @@ class Plugin {
      * @since 1.0.0
      * @return void
      */
-    public function on_activation(): void {
-        try {
+    public function on_activation(): void {        try {
             // Ensure database is initialized
             if (null === $this->database) {
                 $this->init_database();
@@ -492,22 +486,15 @@ class Plugin {
             // Create default options (простые базовые настройки)
             $default_options = [
                 'plugin_version' => self::VERSION,
-                'activation_time' => \current_time('mysql', true),
-                'basic_mode' => true  // Флаг что работаем в упрощенном режиме
-            ];            \add_option(self::PLUGIN_SLUG . '_options', $default_options);
+                'activation_time' => \current_time('mysql', true)
+            ];
+            \add_option(self::PLUGIN_SLUG . '_options', $default_options);
 
-            // Log successful activation (если logger инициализирован)
-            if ($this->logger !== null) {
-                $this->logger->log('Plugin activated successfully (basic mode)', 'info', [
-                    'version' => self::VERSION,
-                    'options_created' => true
-                ]);
-            }
-
+            // Log successful activation (use error_log during activation as logger may not be initialized)
+            \error_log('[' . \date('Y-m-d H:i:s') . '] WPVN.INFO: Plugin activated successfully | Context: {"version":"' . self::VERSION . '","options_created":true}');
         } catch (\Exception $e) {
             \error_log('WPVN Plugin activation failed: ' . $e->getMessage());
-            // В продакшене тут будет \wp_die(), но для обучения просто логируем
-            $this->logger->log('Plugin activation failed', 'error', ['error' => $e->getMessage()]);
+            \wp_die('Plugin activation failed: ' . $e->getMessage());
         }
     }
 
