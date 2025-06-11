@@ -159,7 +159,8 @@ class Plugin {
      *
      * @since 1.0.0
      * @return void
-     */    public function init(): void {
+     */
+    public function init(): void {
         // Prevent multiple initialization
         if ($this->is_initialized) {
             return;
@@ -431,7 +432,8 @@ class Plugin {
      * Пока заглушка - добавим позже
      *
      * @since 1.0.0
-     * @param string $hook The current admin page hook     * @return void
+     * @param string $hook The current admin page hook
+     * @return void
      */
     public function enqueue_admin_assets(string $hook): void {
         // TODO: Добавим когда создадим CSS/JS файлы
@@ -442,7 +444,8 @@ class Plugin {
      * Register plugin settings
      * Пока заглушка - добавим позже
      *
-     * @since 1.0.0     * @return void
+     * @since 1.0.0
+     * @return void
      */
     public function register_settings(): void {
         // TODO: Добавим настройки позже        // Method ready for WordPress Settings API integration
@@ -482,7 +485,8 @@ class Plugin {
      *
      * Called when the plugin is activated. Упрощенная версия для обучения.
      *
-     * @since 1.0.0     * @return void
+     * @since 1.0.0
+     * @return void
      */
     public function on_activation(): void {
         try {
