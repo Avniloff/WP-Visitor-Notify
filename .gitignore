@@ -36,6 +36,13 @@ pids
 *.seed
 *.pid.lock
 
+# Development & Documentation
+test/
+docs/
+session.md
+*.session
+development-notes.md
+
 # Docker & Development Environment
 .docker/
 docker-compose.yml
