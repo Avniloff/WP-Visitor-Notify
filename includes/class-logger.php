@@ -114,7 +114,8 @@ class Logger {
      * @param string $message Log message
      * @param array $context Additional context
      * @param string|null $component Component name
-     * @return bool Success status     */
+     * @return bool Success status
+     */
     public function info(string $message, array $context = [], ?string $component = null): bool {
         return $this->log($message, 'info', $context, $component);
     }
@@ -126,7 +127,8 @@ class Logger {
      * @param string $message Log message
      * @param array $context Additional context
      * @param string|null $component Component name
-     * @return bool Success status     */
+     * @return bool Success status
+     */
     public function error(string $message, array $context = [], ?string $component = null): bool {
         return $this->log($message, 'error', $context, $component);
     }
