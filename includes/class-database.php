@@ -4,11 +4,10 @@
  *
  * Simplified database class for basic table management.
  * Contains schema definitions for future use.
- *
- * @package    WP_Visitor_Notify
+ * * @package    WP_Visitor_Notify
  * @subpackage Includes
  * @since      1.0.0
- * @author     Your Name
+ * @author     Avniloff Avraham
  */
 
 namespace WPVN;

@@ -4,11 +4,10 @@
  *
  * Handles complete plugin removal including all data, options, and database tables.
  * This class is called when the plugin is completely uninstalled from WordPress.
- *
- * @package    WP_Visitor_Notify
+ * * @package    WP_Visitor_Notify
  * @subpackage Includes
  * @since      1.0.0
- * @author     Your Name
+ * @author     Avniloff Avraham
  */
 
 namespace WPVN;
@@ -34,13 +33,13 @@ class Uninstaller {
      * @since 1.0.0
      * @var string
      */
-    private const PLUGIN_SLUG = 'wp-visitor-notify';
-
-    /**
+    private const PLUGIN_SLUG = 'wp-visitor-notify';    /**
      * Main uninstall method
      *
      * Called by WordPress when plugin is completely uninstalled.
-     * Removes ALL plugin data to ensure clean removal.
+     * Removes ONLY plugin settings and interface, but preserves security data.
+     * 
+     * IMPORTANT: Visitor data remains in database for security analysis!
      *
      * @since 1.0.0
      * @return void
@@ -53,15 +52,12 @@ class Uninstaller {
 
         try {
             // Log uninstall start
-            error_log('[' . date('Y-m-d H:i:s') . '] WPVN.INFO: Starting plugin uninstall process');
+            error_log('[' . date('Y-m-d H:i:s') . '] WPVN.INFO: Starting plugin uninstall - preserving security data');
 
-            // Remove all plugin options
+            // Remove only plugin settings, NOT visitor data
             self::remove_plugin_options();
 
-            // Drop all plugin database tables
-            self::drop_database_tables();
-
-            // Clear any scheduled cron events
+            // Clear scheduled cron events
             self::clear_cron_events();
 
             // Remove user capabilities if any were added
@@ -70,8 +66,11 @@ class Uninstaller {
             // Clean up transients
             self::clear_transients();
 
+            // ВАЖНО: НЕ удаляем таблицы с данными посетителей!
+            // Данные остаются для анализа безопасности
+
             // Log successful uninstall
-            error_log('[' . date('Y-m-d H:i:s') . '] WPVN.INFO: Plugin uninstalled successfully - all data removed');
+            error_log('[' . date('Y-m-d H:i:s') . '] WPVN.INFO: Plugin uninstalled - settings removed, security data preserved');
 
         } catch (\Exception $e) {
             error_log('WPVN Uninstaller Error: ' . $e->getMessage());
@@ -96,20 +95,22 @@ class Uninstaller {
         foreach ($options_to_remove as $option) {
             delete_option($option);
         }
-    }
-
-    /**
-     * Drop all plugin database tables
+    }    /**
+     * Drop all plugin database tables (DANGEROUS - only for development!)
+     *
+     * This method completely removes all visitor data.
+     * Should NEVER be called in production for security plugins!
      *
      * @since 1.0.0
      * @return void
      */
-    private static function drop_database_tables(): void {
+    private static function drop_database_tables_dangerous(): void {
         global $wpdb;
 
+        // WARNING: This removes ALL security data permanently!
         $tables = [
             $wpdb->prefix . 'wpvn_sessions',
-            $wpdb->prefix . 'wpvn_page_views',
+            $wpdb->prefix . 'wpvn_page_views', 
             $wpdb->prefix . 'wpvn_notification_rules',
             $wpdb->prefix . 'wpvn_notification_history',
             $wpdb->prefix . 'wpvn_logs',
@@ -118,6 +119,8 @@ class Uninstaller {
         foreach ($tables as $table) {
             $wpdb->query($wpdb->prepare("DROP TABLE IF EXISTS %s", $table));
         }
+        
+        error_log('[' . date('Y-m-d H:i:s') . '] WPVN.WARNING: Security data tables dropped - THIS SHOULD NOT HAPPEN IN PRODUCTION!');
     }
 
     /**
@@ -126,9 +129,7 @@ class Uninstaller {
      * @since 1.0.0
      * @return void
      */
-    private static function clear_cron_events(): void {
-        $cron_hooks = [
-            'wpvn_daily_cleanup',
+    private static function clear_cron_events(): void {        $cron_hooks = [
             'wpvn_hourly_aggregation',
             'wpvn_notification_check',
         ];

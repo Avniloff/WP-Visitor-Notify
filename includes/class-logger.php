@@ -4,11 +4,10 @@
  *
  * Simplified logger that writes directly to PHP error_log for Docker visibility.
  * No database dependency - pure error_log output.
- *
- * @package    WP_Visitor_Notify
+ * * @package    WP_Visitor_Notify
  * @subpackage Includes
  * @since      1.0.0
- * @author     Your Name
+ * @author     Avniloff Avraham
  */
 
 namespace WPVN;

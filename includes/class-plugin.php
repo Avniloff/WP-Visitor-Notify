@@ -7,11 +7,10 @@
  *
  * The Singleton pattern ensures that only one instance of the plugin runs,
  * preventing conflicts and maintaining a centralized state management.
- *
- * @package    WP_Visitor_Notify
+ * * @package    WP_Visitor_Notify
  * @subpackage Includes
  * @since      1.0.0
- * @author     Your Name
+ * @author     Avniloff Avraham
  */
 
 namespace WPVN;
