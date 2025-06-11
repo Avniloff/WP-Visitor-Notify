@@ -67,7 +67,9 @@ class Plugin {
      * @since 1.0.0
      * @var Database|null
      */
-    private ?Database $database = null;    /**
+    private ?Database $database = null;
+
+    /**
      * Visitor tracking engine
      * TODO: Будет добавлен когда создадим класс Tracker
      *
@@ -157,12 +159,13 @@ class Plugin {
      *
      * @since 1.0.0
      * @return void
-     */
-    public function init(): void {
+     */    public function init(): void {
         // Prevent multiple initialization
         if ($this->is_initialized) {
             return;
-        }        try {
+        }
+
+        try {
             // Initialize core components in dependency order
             // Пока инициализируем только основные компоненты для обучения
             $this->init_logger();
@@ -214,8 +217,8 @@ class Plugin {
      * @return void
      */
     private function init_logger(): void {
-        if (null === $this->logger) {
-            $this->logger = new Logger();        }
+        if (null === $this->logger) {            $this->logger = new Logger();
+        }
     }
 
     /**
@@ -240,9 +243,10 @@ class Plugin {
                 if (!$success) {
                     throw new \Exception('Failed to create database tables');
                 }
-            }
-        }
-    }/**
+            }        }
+    }
+
+    /**
      * Initialize device/browser detector
      * TODO: Создадим когда будем готовы
      *
@@ -305,10 +309,11 @@ class Plugin {
                 $this->database,
                 $this->analytics,
                 $this->logger
-            );
-        }
+            );        }
     }
-    */    /**
+    */
+
+    /**
      * Set up basic WordPress hooks and filters
      *
      * Регистрирует только базовые хуки для тестирования.
@@ -328,7 +333,9 @@ class Plugin {
             
             // Settings API hooks
             \add_action('admin_init', [$this, 'register_settings']);
-        }        // NOTE: Lifecycle hooks are registered in main plugin file to avoid duplication
+        }
+
+        // NOTE: Lifecycle hooks are registered in main plugin file to avoid duplication
         
         // TODO: Добавим позже когда создадим нужные классы
         /*
@@ -344,8 +351,8 @@ class Plugin {
 
         // Cron jobs для фоновой обработки
         \add_action('wpvn_daily_cleanup', [$this->database, 'cleanup_old_data']);
-        \add_action('wpvn_hourly_aggregation', [$this->analytics, 'update_aggregated_data']);
-        \add_action('wpvn_notification_check', [$this->notifier, 'check_notification_rules']);        */
+        \add_action('wpvn_hourly_aggregation', [$this->analytics, 'update_aggregated_data']);        \add_action('wpvn_notification_check', [$this->notifier, 'check_notification_rules']);
+        */
     }
 
     /**
@@ -415,8 +422,8 @@ class Plugin {
             \__('Logs', self::PLUGIN_SLUG),
             \__('Logs', self::PLUGIN_SLUG),
             'manage_options',
-            self::PLUGIN_SLUG . '-logs',
-            [$this, 'render_logs_page']        );
+            self::PLUGIN_SLUG . '-logs',            [$this, 'render_logs_page']
+        );
     }
 
     /**
@@ -424,9 +431,9 @@ class Plugin {
      * Пока заглушка - добавим позже
      *
      * @since 1.0.0
-     * @param string $hook The current admin page hook
-     * @return void
-     */    public function enqueue_admin_assets(string $hook): void {
+     * @param string $hook The current admin page hook     * @return void
+     */
+    public function enqueue_admin_assets(string $hook): void {
         // TODO: Добавим когда создадим CSS/JS файлы
         // Method ready for asset enqueuing when needed
     }
@@ -435,12 +442,13 @@ class Plugin {
      * Register plugin settings
      * Пока заглушка - добавим позже
      *
-     * @since 1.0.0
-     * @return void
-     */    public function register_settings(): void {
-        // TODO: Добавим настройки позже
-        // Method ready for WordPress Settings API integration
-    }/**
+     * @since 1.0.0     * @return void
+     */
+    public function register_settings(): void {
+        // TODO: Добавим настройки позже        // Method ready for WordPress Settings API integration
+    }
+
+    /**
      * TODO: Методы настроек - добавим позже когда будем готовы
      */
     
@@ -466,17 +474,18 @@ class Plugin {
     }
 
     public function validate_settings(array $input): array {
-        // ...код валидации...
-    }
-    */    /**
+        // ...код валидации...    }
+    */
+
+    /**
      * Plugin activation handler
      *
      * Called when the plugin is activated. Упрощенная версия для обучения.
      *
-     * @since 1.0.0
-     * @return void
+     * @since 1.0.0     * @return void
      */
-    public function on_activation(): void {        try {
+    public function on_activation(): void {
+        try {
             // Ensure database is initialized
             if (null === $this->database) {
                 $this->init_database();
@@ -509,9 +518,9 @@ class Plugin {
         // Пока просто логируем деактивацию
         if ($this->logger) {
             $this->logger->log('Plugin deactivated', 'info');
-        }
-        
-        // TODO: Добавим очистку cron-задач когда они будут        // TODO: Добавим flush_rewrite_rules() когда будет нужно
+        }        
+        // TODO: Добавим очистку cron-задач когда они будут
+        // TODO: Добавим flush_rewrite_rules() когда будет нужно
     }
 
     /**
@@ -536,9 +545,10 @@ class Plugin {
         // Notification checks every 5 minutes
         if (!\wp_next_scheduled('wpvn_notification_check')) {
             \wp_schedule_event(\time(), 'wpvn_5min', 'wpvn_notification_check');
-        }
-    }
-    *//**
+        }    }
+    */
+
+    /**
      * Render dashboard admin page
      * Пока простая заглушка для тестирования
      *
@@ -665,9 +675,10 @@ class Plugin {
      * @since 1.0.0
      * @return void
      */
-    private function __clone() {
-        // Prevent cloning
-    }    /**
+    private function __clone() {        // Prevent cloning
+    }
+
+    /**
      * Prevent unserialization of the instance (Singleton pattern)
      *
      * @since 1.0.0

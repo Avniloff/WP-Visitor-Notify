@@ -18,7 +18,8 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/** * Simple Logger class
+/**
+ * Simple Logger class
  *
  * PSR-3 compatible logger that writes directly to error_log.
  * Perfect for development and Docker environments.
@@ -57,8 +58,8 @@ class Logger {
      * @since 1.0.0
      */
     public function __construct() {
-        // Get log level from plugin settings (default to 'info')
-        $options = \get_option('wp-visitor-notify_options', []);        $this->log_level = $options['log_level'] ?? 'info';
+        // Get log level from plugin settings (default to 'info')        $options = \get_option('wp-visitor-notify_options', []);
+        $this->log_level = $options['log_level'] ?? 'info';
     }
 
     /**
@@ -87,10 +88,10 @@ class Logger {
 
         // Format message for error_log
         $formatted_message = $this->format_message($message, $level, $context, $component);
-        
-        // Write to error_log (visible in Docker logs)
+          // Write to error_log (visible in Docker logs)
         \error_log($formatted_message);
-          return true;
+        
+        return true;
     }
 
     /**
@@ -113,9 +114,9 @@ class Logger {
      * @param string $message Log message
      * @param array $context Additional context
      * @param string|null $component Component name
-     * @return bool Success status
-     */
-    public function info(string $message, array $context = [], ?string $component = null): bool {        return $this->log($message, 'info', $context, $component);
+     * @return bool Success status     */
+    public function info(string $message, array $context = [], ?string $component = null): bool {
+        return $this->log($message, 'info', $context, $component);
     }
 
     /**
@@ -125,9 +126,9 @@ class Logger {
      * @param string $message Log message
      * @param array $context Additional context
      * @param string|null $component Component name
-     * @return bool Success status
-     */
-    public function error(string $message, array $context = [], ?string $component = null): bool {        return $this->log($message, 'error', $context, $component);
+     * @return bool Success status     */
+    public function error(string $message, array $context = [], ?string $component = null): bool {
+        return $this->log($message, 'error', $context, $component);
     }
 
     /**
@@ -164,9 +165,9 @@ class Logger {
         
         // Add context if provided
         if (!empty($context)) {
-            $context_json = \wp_json_encode($context);
-            $formatted .= " | Context: {$context_json}";
+            $context_json = \wp_json_encode($context);            $formatted .= " | Context: {$context_json}";
         }
-          return $formatted;
+        
+        return $formatted;
     }
 }

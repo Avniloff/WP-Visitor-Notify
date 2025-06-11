@@ -66,7 +66,8 @@ class Database {
         $this->tables = [
             'sessions' => $wpdb->prefix . 'wpvn_sessions',
             'page_views' => $wpdb->prefix . 'wpvn_page_views', 
-            'notification_rules' => $wpdb->prefix . 'wpvn_notification_rules',            'notification_history' => $wpdb->prefix . 'wpvn_notification_history',
+            'notification_rules' => $wpdb->prefix . 'wpvn_notification_rules',
+            'notification_history' => $wpdb->prefix . 'wpvn_notification_history',
             'logs' => $wpdb->prefix . 'wpvn_logs'
         ];
     }
@@ -133,9 +134,9 @@ class Database {
      * Drop all plugin tables
      *
      * @since 1.0.0
-     * @return bool True on success
-     */
-    public function drop_tables(): bool {        // Remove stored database version
+     * @return bool True on success     */
+    public function drop_tables(): bool {
+        // Remove stored database version
         \delete_option('wpvn_db_version');
         return true;
     }
@@ -197,7 +198,8 @@ class Database {
     
     // TODO: Add data operation methods:
     // - insert_session()
-    // - insert_page_view()    // - get_session()
+    // - insert_page_view()
+    // - get_session()
     // - get_analytics_data()
     // - cleanup_old_records()
     */

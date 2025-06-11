@@ -53,9 +53,9 @@ if (version_compare($wp_version, '6.2', '<')) {
     add_action('admin_notices', function () {
         echo '<div class="notice notice-error"><p>';
         echo '<strong>WordPress Visitor Notify:</strong> This plugin requires WordPress 6.2 or higher. ';
-        echo 'You are running WordPress ' . get_bloginfo('version') . '. Please upgrade WordPress to activate this plugin.';
-        echo '</p></div>';
-    });    return;
+        echo 'You are running WordPress ' . get_bloginfo('version') . '. Please upgrade WordPress to activate this plugin.';        echo '</p></div>';
+    });
+    return;
 }
 
 // СОБСТВЕННЫЙ АВТОЗАГРУЗЧИК

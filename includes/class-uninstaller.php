@@ -165,8 +165,8 @@ class Uninstaller {
         $wpdb->query(
             $wpdb->prepare(
                 "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s",
-                '_transient_wpvn_%',
-                '_transient_timeout_wpvn_%'
-            )        );
+                '_transient_wpvn_%',                '_transient_timeout_wpvn_%'
+            )
+        );
     }
 }
