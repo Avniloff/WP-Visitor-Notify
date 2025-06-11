@@ -667,12 +667,11 @@ class Plugin {
      */
     private function __clone() {
         // Prevent cloning
-    }
-
-    /**
+    }    /**
      * Prevent unserialization of the instance (Singleton pattern)
      *
-     * @since 1.0.0     * @return void
+     * @since 1.0.0
+     * @return void
      */
     public function __wakeup() {
         throw new \Exception('Cannot unserialize singleton');

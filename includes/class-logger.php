@@ -18,12 +18,12 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/**
- * Simple Logger class
+/** * Simple Logger class
  *
  * PSR-3 compatible logger that writes directly to error_log.
  * Perfect for development and Docker environments.
- * * @since 1.0.0
+ *
+ * @since 1.0.0
  */
 class Logger {
 
