@@ -215,9 +215,10 @@ class Plugin {
      */
     private function init_logger(): void {
         if (null === $this->logger) {
-            $this->logger = new Logger();
-        }
-    }    /**
+            $this->logger = new Logger();        }
+    }
+
+    /**
      * Initialize database handler
      *
      * Sets up database tables and ensures proper schema version.
@@ -327,11 +328,7 @@ class Plugin {
             
             // Settings API hooks
             \add_action('admin_init', [$this, 'register_settings']);
-        }
-
-        // Plugin lifecycle hooks
-        \register_activation_hook(WPVN_PLUGIN_FILE, [$this, 'on_activation']);
-        \register_deactivation_hook(WPVN_PLUGIN_FILE, [$this, 'on_deactivation']);
+        }        // NOTE: Lifecycle hooks are registered in main plugin file to avoid duplication
         
         // TODO: Добавим позже когда создадим нужные классы
         /*
@@ -348,9 +345,10 @@ class Plugin {
         // Cron jobs для фоновой обработки
         \add_action('wpvn_daily_cleanup', [$this->database, 'cleanup_old_data']);
         \add_action('wpvn_hourly_aggregation', [$this->analytics, 'update_aggregated_data']);
-        \add_action('wpvn_notification_check', [$this->notifier, 'check_notification_rules']);
-        */
-    }    /**
+        \add_action('wpvn_notification_check', [$this->notifier, 'check_notification_rules']);        */
+    }
+
+    /**
      * Load plugin text domain for internationalization
      * TODO: Добавим когда будем готовы к переводам
      *
@@ -418,9 +416,10 @@ class Plugin {
             \__('Logs', self::PLUGIN_SLUG),
             'manage_options',
             self::PLUGIN_SLUG . '-logs',
-            [$this, 'render_logs_page']
-        );
-    }    /**
+            [$this, 'render_logs_page']        );
+    }
+
+    /**
      * Enqueue admin assets (CSS and JavaScript)
      * Пока заглушка - добавим позже
      *
@@ -512,9 +511,10 @@ class Plugin {
             $this->logger->log('Plugin deactivated', 'info');
         }
         
-        // TODO: Добавим очистку cron-задач когда они будут
-        // TODO: Добавим flush_rewrite_rules() когда будет нужно
-    }    /**
+        // TODO: Добавим очистку cron-задач когда они будут        // TODO: Добавим flush_rewrite_rules() когда будет нужно
+    }
+
+    /**
      * Schedule cron events
      * TODO: Добавим когда будем готовы к фоновым задачам
      *
@@ -672,8 +672,7 @@ class Plugin {
     /**
      * Prevent unserialization of the instance (Singleton pattern)
      *
-     * @since 1.0.0
-     * @return void
+     * @since 1.0.0     * @return void
      */
     public function __wakeup() {
         throw new \Exception('Cannot unserialize singleton');

@@ -197,8 +197,7 @@ class Database {
     
     // TODO: Add data operation methods:
     // - insert_session()
-    // - insert_page_view()
-    // - get_session()
+    // - insert_page_view()    // - get_session()
     // - get_analytics_data()
     // - cleanup_old_records()
     */

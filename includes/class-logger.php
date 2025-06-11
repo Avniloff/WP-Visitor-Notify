@@ -23,10 +23,11 @@ if (!defined('ABSPATH')) {
  *
  * PSR-3 compatible logger that writes directly to error_log.
  * Perfect for development and Docker environments.
- *
- * @since 1.0.0
+ * * @since 1.0.0
  */
-class Logger {    /**
+class Logger {
+
+    /**
      * Log levels (simplified for practical use)
      *
      * @since 1.0.0
@@ -57,9 +58,10 @@ class Logger {    /**
      */
     public function __construct() {
         // Get log level from plugin settings (default to 'info')
-        $options = \get_option('wp-visitor-notify_options', []);
-        $this->log_level = $options['log_level'] ?? 'info';
-    }    /**
+        $options = \get_option('wp-visitor-notify_options', []);        $this->log_level = $options['log_level'] ?? 'info';
+    }
+
+    /**
      * Log a message with specified level
      *
      * Main logging method that accepts any severity level.
@@ -88,9 +90,10 @@ class Logger {    /**
         
         // Write to error_log (visible in Docker logs)
         \error_log($formatted_message);
-        
-        return true;
-    }    /**
+          return true;
+    }
+
+    /**
      * Log debug level message
      *
      * @since 1.0.0
@@ -112,9 +115,10 @@ class Logger {    /**
      * @param string|null $component Component name
      * @return bool Success status
      */
-    public function info(string $message, array $context = [], ?string $component = null): bool {
-        return $this->log($message, 'info', $context, $component);
-    }    /**
+    public function info(string $message, array $context = [], ?string $component = null): bool {        return $this->log($message, 'info', $context, $component);
+    }
+
+    /**
      * Log error level message
      *
      * @since 1.0.0
@@ -123,9 +127,10 @@ class Logger {    /**
      * @param string|null $component Component name
      * @return bool Success status
      */
-    public function error(string $message, array $context = [], ?string $component = null): bool {
-        return $this->log($message, 'error', $context, $component);
-    }    /**
+    public function error(string $message, array $context = [], ?string $component = null): bool {        return $this->log($message, 'error', $context, $component);
+    }
+
+    /**
      * Check if a log level should be recorded
      *
      * @since 1.0.0
@@ -162,7 +167,6 @@ class Logger {    /**
             $context_json = \wp_json_encode($context);
             $formatted .= " | Context: {$context_json}";
         }
-        
-        return $formatted;
+          return $formatted;
     }
 }
