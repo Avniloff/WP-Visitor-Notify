@@ -134,7 +134,8 @@ class Database {
      * Drop all plugin tables
      *
      * @since 1.0.0
-     * @return bool True on success     */
+     * @return bool True on success
+     */
     public function drop_tables(): bool {
         // Remove stored database version
         \delete_option('wpvn_db_version');
