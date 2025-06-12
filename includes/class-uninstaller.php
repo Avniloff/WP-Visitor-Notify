@@ -67,8 +67,8 @@ class Uninstaller {
             // Clean up transients
             self::clear_transients();
 
-            // ВАЖНО: НЕ удаляем таблицы с данными посетителей!
-            // Данные остаются для анализа безопасности
+            // IMPORTANT: Do NOT delete visitor data tables!
+            // Data remains for security analysis
 
             // Log successful uninstall
             error_log('[' . date('Y-m-d H:i:s') . '] WPVN.INFO: Plugin uninstalled - settings removed, security data preserved');

@@ -16,18 +16,18 @@ wp-visitor-notify/
 │   ├── class-notifier.php              # ❌ Notification system
 │   ├── class-cleanup.php               # ❌ Cleanup utilities
 │   └── class-validator.php             # ❌ Data validation
-├── admin/                              # ✅ Admin interface
+├── admin/                              # ❌ Admin interface (planned)
 │   ├── class-admin.php                 # ❌ Main controller
 │   ├── class-dashboard.php             # ❌ Dashboard controller
 │   ├── class-settings.php              # ❌ Settings controller
 │   ├── class-notifications.php         # ❌ Notifications controller
 │   ├── class-logs.php                  # ❌ Logs controller
-│   ├── templates/                      # ✅ HTML templates
+│   ├── templates/                      # ❌ HTML templates
 │   │   ├── dashboard.php               # ❌ Dashboard panel
 │   │   ├── settings.php                # ❌ Settings page
 │   │   ├── notifications.php           # ❌ Notification templates
 │   │   └── logs.php                    # ❌ Logs view
-│   └── assets/                         # ✅ CSS and JS
+│   └── assets/                         # ❌ CSS and JS
 │       ├── css/admin.css               # ❌ Admin styles
 │       └── js/admin.js                 # ❌ Admin JS functionality
 ├── languages/                          # ✅ Translations
@@ -86,7 +86,7 @@ wp-visitor-notify/
 - Clear cron events (clear_cron_events)
 - Remove capabilities (remove_capabilities)
 - Clear transients (clear_transients)
-- Method drop_database_tables_dangerous() (NEVER called in production - development/testing only!)
+- Method drop_database_tables_dangerous() (development/testing only - NEVER call in production and never delete visitor data)
 
 ### `includes/class-tracker.php` ❌
 - Visit tracking
@@ -298,7 +298,7 @@ wp-visitor-notify/
 **Admin JavaScript**
 - Admin interactivity
 
-#### `templates/` ✅ (empty)
+#### `templates/` ❌ (planned, empty)
 **Admin page HTML templates**
 - Planned: dashboard.php, settings.php, notifications.php, logs.php
 

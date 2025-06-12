@@ -133,13 +133,13 @@ class Plugin {
 
         try {
             // Initialize core components in dependency order
-            // Пока инициализируем только основные компоненты для обучения
+            // Initialize only the basic components for learning purposes
             $this->init_logger();
             $this->init_database();
             
             // Additional components will be added in future versions
 
-            // Set up WordPress hooks (только базовые пока)
+            // Set up basic WordPress hooks for now
             $this->setup_basic_hooks();
 
             // Load language files for internationalization (planned)
@@ -211,14 +211,14 @@ class Plugin {
     /**
      * Set up basic WordPress hooks and filters
      *
-     * Регистрирует только базовые хуки для тестирования.
-     * Полная версия будет добавлена позже.
+     * Registers only the basic hooks for testing.
+     * The full version will be added later.
      *
      * @since 1.0.0
      * @return void
      */
     private function setup_basic_hooks(): void {
-        // Пока только базовые хуки для тестирования
+        // Only basic hooks for testing for now
         
         // Admin-only hooks
         if (\is_admin()) {
@@ -323,7 +323,7 @@ class Plugin {
     /**
      * Plugin activation handler
      *
-     * Called when the plugin is activated. Упрощенная версия для обучения.
+     * Called when the plugin is activated. Simplified version for learning.
      *
      * @since 1.0.0
      * @return void
@@ -335,7 +335,7 @@ class Plugin {
                 $this->init_database();
             }
 
-            // Create default options (простые базовые настройки)
+            // Create default options (simple basic settings)
             $default_options = [
                 'plugin_version' => self::VERSION,
                 'activation_time' => \current_time('mysql', true)
@@ -353,13 +353,13 @@ class Plugin {
     /**
      * Plugin deactivation handler
      *
-     * Called when the plugin is deactivated. Упрощенная версия для обучения.
+     * Called when the plugin is deactivated. Simplified version for learning.
      *
      * @since 1.0.0
      * @return void
      */
     public function on_deactivation(): void {
-        // Пока просто логируем деактивацию
+        // For now we simply log the deactivation
         if ($this->logger) {
             $this->logger->log('Plugin deactivated', 'info');
         }        
@@ -370,7 +370,7 @@ class Plugin {
 
     /**
      * Render dashboard admin page
-     * Пока простая заглушка для тестирования
+     * Simple placeholder for testing
      *
      * @since 1.0.0
      * @return void
@@ -378,13 +378,13 @@ class Plugin {
     public function render_dashboard_page(): void {
         echo '<div class="wrap">';
         echo '<h1>' . \esc_html__('WP Visitor Notify Dashboard', 'wp-visitor-notify') . '</h1>';
-        echo '<p>Добро пожаловать в WP Visitor Notify! Это базовая версия для обучения.</p>';
+        echo '<p>Welcome to WP Visitor Notify! This is a basic version for learning.</p>';
         
-        // Покажем статус базы данных
+        // Show database status
         if ($this->database && $this->database->tables_exist()) {
-            echo '<div class="notice notice-success"><p>✅ База данных инициализирована правильно!</p></div>';
+            echo '<div class="notice notice-success"><p>✅ Database initialized correctly!</p></div>';
         } else {
-            echo '<div class="notice notice-error"><p>❌ Проблема с базой данных!</p></div>';
+            echo '<div class="notice notice-error"><p>❌ Database problem!</p></div>';
         }
         
         echo '</div>';
@@ -392,7 +392,7 @@ class Plugin {
 
     /**
      * Render settings admin page
-     * Пока простая заглушка для тестирования
+     * Simple placeholder for testing
      *
      * @since 1.0.0
      * @return void
@@ -400,13 +400,13 @@ class Plugin {
     public function render_settings_page(): void {
         echo '<div class="wrap">';
         echo '<h1>' . \esc_html__('Settings', 'wp-visitor-notify') . '</h1>';
-        echo '<p>Настройки будут добавлены позже.</p>';
+        echo '<p>Settings will be added later.</p>';
         echo '</div>';
     }
 
     /**
      * Render notifications admin page
-     * Пока простая заглушка для тестирования
+     * Simple placeholder for testing
      *
      * @since 1.0.0
      * @return void
@@ -414,13 +414,13 @@ class Plugin {
     public function render_notifications_page(): void {
         echo '<div class="wrap">';
         echo '<h1>' . \esc_html__('Notifications', 'wp-visitor-notify') . '</h1>';
-        echo '<p>Уведомления будут добавлены позже.</p>';
+        echo '<p>Notifications will be added later.</p>';
         echo '</div>';
     }
 
     /**
      * Render logs admin page
-     * Пока простая заглушка для тестирования
+     * Simple placeholder for testing
      *
      * @since 1.0.0
      * @return void
@@ -428,13 +428,13 @@ class Plugin {
     public function render_logs_page(): void {
         echo '<div class="wrap">';
         echo '<h1>' . \esc_html__('Logs', 'wp-visitor-notify') . '</h1>';
-        echo '<p>Логи будут добавлены позже.</p>';
+        echo '<p>Logs will be added later.</p>';
         
-        // Покажем базовый тест логгера
+        // Show a basic logger test
         if ($this->logger) {
-            echo '<h3>Тест логгера:</h3>';
-            $this->logger->log('Тестовое сообщение из админки', 'info', ['source' => 'admin_page']);
-            echo '<p>✅ Лог записан! (проверьте в error_log или базе данных)</p>';
+            echo '<h3>Logger test:</h3>';
+            $this->logger->log('Test message from admin', 'info', ['source' => 'admin_page']);
+            echo '<p>✅ Log recorded! (check error_log or database)</p>';
         }
         
         echo '</div>';
