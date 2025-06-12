@@ -126,10 +126,11 @@ class Database {
      */
     public function get_wpdb(): \wpdb {
         return $this->wpdb;
-    }
-
-    /**
+    }    /**
      * Drop all plugin tables
+     * 
+     * IMPORTANT: This method is only used for development/testing purposes,
+     * not during production uninstallation where visitor data is preserved!
      *
      * @since 1.0.0
      * @return bool True on success

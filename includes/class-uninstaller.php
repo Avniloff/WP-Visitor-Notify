@@ -20,8 +20,8 @@ if (!defined('ABSPATH')) {
 /**
  * Uninstaller class
  *
- * Handles complete cleanup when plugin is uninstalled.
- * Removes all data, options, tables, and scheduled events.
+ * Handles cleanup when plugin is uninstalled.
+ * Removes plugin options and scheduled events, but preserves visitor data tables for security analysis.
  *
  * @since 1.0.0
  */

@@ -67,7 +67,7 @@ wp-visitor-notify/
 - Table names with prefix
 - Plugin table creation
 - Table existence check
-- Table deletion
+- Table deletion methods (controlled - not used during uninstallation)
 - Get DB version
 - Get table list
 - Get $wpdb object
@@ -86,7 +86,7 @@ wp-visitor-notify/
 - Clear cron events (clear_cron_events)
 - Remove capabilities (remove_capabilities)
 - Clear transients (clear_transients)
-- Method drop_database_tables_dangerous() (for development only!)
+- Method drop_database_tables_dangerous() (NEVER called in production - development/testing only!)
 
 ### `includes/class-tracker.php` ❌
 - Visit tracking
@@ -279,10 +279,10 @@ wp-visitor-notify/
 - Methods: `log()`, `debug()`, `info()`, `error()`
 
 #### `class-uninstaller.php` ✅
-**Full cleanup on plugin removal**
+**Careful cleanup on plugin removal**
 - Static method `uninstall()` for register_uninstall_hook
 - Remove all plugin options
-- Remove all DB tables
+- IMPORTANT: Does NOT delete visitor data tables (for security analysis!)
 - Clear cron events (2 planned events):
   - `wpvn_hourly_aggregation` - hourly statistics aggregation
   - `wpvn_notification_check` - notification rules check every 5 minutes
