@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Plugin Name: WordPress Visitor Notify
  * Plugin URI: https://github.com/Avniloff/WP-Visitor-Notify
@@ -18,8 +19,6 @@
  * @package WPVN
  * @since 1.0.0
  */
-
-declare(strict_types=1);
 
 // Prevent direct access
 if (!defined('ABSPATH')) {

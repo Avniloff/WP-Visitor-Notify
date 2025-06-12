@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Database operations handler for WP Visitor Notify Plugin
  *
