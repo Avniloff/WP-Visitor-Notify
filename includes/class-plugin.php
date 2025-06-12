@@ -132,13 +132,13 @@ class Plugin {
 
         try {
             // Initialize core components in dependency order
-            // Пока инициализируем только основные компоненты для обучения
+            // Initialize only the essential components for learning
             $this->init_logger();
             $this->init_database();
             
             // Additional components will be added in future versions
 
-            // Set up WordPress hooks (только базовые пока)
+            // Set up WordPress hooks (basic ones only for now)
             $this->setup_basic_hooks();
 
             // Load language files for internationalization (planned)
@@ -210,14 +210,14 @@ class Plugin {
     /**
      * Set up basic WordPress hooks and filters
      *
-     * Регистрирует только базовые хуки для тестирования.
-     * Полная версия будет добавлена позже.
+     * Registers only the fundamental hooks for testing.
+     * A complete version will be added later.
      *
      * @since 1.0.0
      * @return void
      */
     private function setup_basic_hooks(): void {
-        // Пока только базовые хуки для тестирования
+        // Currently register just the bare minimum hooks for testing
         
         // Admin-only hooks
         if (\is_admin()) {
@@ -322,7 +322,7 @@ class Plugin {
     /**
      * Plugin activation handler
      *
-     * Called when the plugin is activated. Упрощенная версия для обучения.
+     * Called when the plugin is activated. Simplified for learning purposes.
      *
      * @since 1.0.0
      * @return void
@@ -334,7 +334,7 @@ class Plugin {
                 $this->init_database();
             }
 
-            // Create default options (простые базовые настройки)
+            // Create default options (simple baseline settings)
             $default_options = [
                 'plugin_version' => self::VERSION,
                 'activation_time' => \current_time('mysql', true)
@@ -352,13 +352,13 @@ class Plugin {
     /**
      * Plugin deactivation handler
      *
-     * Called when the plugin is deactivated. Упрощенная версия для обучения.
+     * Called when the plugin is deactivated. Simplified for learning purposes.
      *
      * @since 1.0.0
      * @return void
      */
     public function on_deactivation(): void {
-        // Пока просто логируем деактивацию
+        // For now just log deactivation
         if ($this->logger) {
             $this->logger->log('Plugin deactivated', 'info');
         }        
@@ -369,7 +369,7 @@ class Plugin {
 
     /**
      * Render dashboard admin page
-     * Пока простая заглушка для тестирования
+     * Temporary stub used for testing
      *
      * @since 1.0.0
      * @return void
@@ -379,7 +379,7 @@ class Plugin {
         echo '<h1>' . \esc_html__('WP Visitor Notify Dashboard', 'wp-visitor-notify') . '</h1>';
         echo '<p>Добро пожаловать в WP Visitor Notify! Это базовая версия для обучения.</p>';
         
-        // Покажем статус базы данных
+        // Display database status
         if ($this->database && $this->database->tables_exist()) {
             echo '<div class="notice notice-success"><p>✅ База данных инициализирована правильно!</p></div>';
         } else {
@@ -391,7 +391,7 @@ class Plugin {
 
     /**
      * Render settings admin page
-     * Пока простая заглушка для тестирования
+     * Temporary stub used for testing
      *
      * @since 1.0.0
      * @return void
@@ -405,7 +405,7 @@ class Plugin {
 
     /**
      * Render notifications admin page
-     * Пока простая заглушка для тестирования
+     * Temporary stub used for testing
      *
      * @since 1.0.0
      * @return void
@@ -419,7 +419,7 @@ class Plugin {
 
     /**
      * Render logs admin page
-     * Пока простая заглушка для тестирования
+     * Temporary stub used for testing
      *
      * @since 1.0.0
      * @return void
@@ -429,7 +429,7 @@ class Plugin {
         echo '<h1>' . \esc_html__('Logs', 'wp-visitor-notify') . '</h1>';
         echo '<p>Логи будут добавлены позже.</p>';
         
-        // Покажем базовый тест логгера
+        // Show a basic logger test
         if ($this->logger) {
             echo '<h3>Тест логгера:</h3>';
             $this->logger->log('Тестовое сообщение из админки', 'info', ['source' => 'admin_page']);
