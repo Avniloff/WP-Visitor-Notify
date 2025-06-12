@@ -82,7 +82,6 @@ class Database {
      */
     public function create_tables(): bool {
         // For now, just mark as successful
-        // TODO: Implement when we need actual data storage
         \update_option('wpvn_db_version', self::DB_VERSION);
         return true;
     }
@@ -147,60 +146,5 @@ class Database {
      * =========================================================================
      */
 
-    /*
-    // TODO: Full table creation methods will be implemented here:
-    
-    private function create_sessions_table(): bool {
-        $table_name = $this->tables['sessions'];
-        $sql = "CREATE TABLE {$table_name} (
-            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-            session_id VARCHAR(64) NOT NULL,
-            ip_address VARCHAR(45) DEFAULT NULL,
-            ip_hash VARCHAR(64) NOT NULL,
-            user_agent TEXT,
-            device_type ENUM('desktop', 'mobile', 'tablet', 'bot') DEFAULT 'desktop',
-            browser VARCHAR(100),
-            operating_system VARCHAR(100),
-            is_bot BOOLEAN DEFAULT FALSE,
-            user_id BIGINT(20) UNSIGNED DEFAULT NULL,
-            first_visit DATETIME NOT NULL,
-            last_activity DATETIME NOT NULL,
-            page_count INT UNSIGNED DEFAULT 1,
-            total_duration INT UNSIGNED DEFAULT 0,
-            referrer TEXT,
-            utm_source VARCHAR(100),
-            utm_medium VARCHAR(100),
-            utm_campaign VARCHAR(100),
-            country_code CHAR(2),
-            city VARCHAR(100),
-            created_at DATETIME NOT NULL,
-            updated_at DATETIME NOT NULL,
-            PRIMARY KEY (id),
-            UNIQUE KEY session_id (session_id),
-            KEY ip_hash (ip_hash),
-            KEY device_type (device_type),
-            KEY is_bot (is_bot),
-            KEY user_id (user_id),
-            KEY created_at (created_at),
-            KEY idx_sessions_analytics (created_at, device_type, is_bot, page_count)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
-        
-        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-        $result = dbDelta($sql);
-        return !empty($result);
-    }
-    
-    // TODO: Add other table creation methods:
-    // - create_page_views_table()
-    // - create_notification_rules_table() 
-    // - create_notification_history_table()
-    // - create_logs_table()
-    
-    // TODO: Add data operation methods:
-    // - insert_session()
-    // - insert_page_view()
-    // - get_session()
-    // - get_analytics_data()
-    // - cleanup_old_records()
-    */
+    /* Placeholder schema definitions removed */
 }
