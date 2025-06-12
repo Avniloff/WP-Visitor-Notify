@@ -1,400 +1,400 @@
-# WP Visitor Notify - Структура проекта и правила разработки
+# WP Visitor Notify - Project Structure and Development Rules
 
-## Продакшен структура файлов
+## Production File Structure
 
 ```
 wp-visitor-notify/
-├── wp-visitor-notify.php               # ✅ Главный файл плагина
-├── includes/                           # ✅ Ядро PHP классов
-│   ├── class-plugin.php                # ✅ Главный класс (Singleton)
-│   ├── class-database.php              # ✅ Операции с БД
-│   ├── class-logger.php                # ✅ Система логирования
-│   ├── class-uninstaller.php           # ✅ Логика деинсталляции
-│   ├── class-tracker.php               # ❌ Отслеживание посетителей
-│   ├── class-analytics.php             # ❌ Аналитика данных
-│   ├── class-detector.php              # ❌ Определение устройств
-│   ├── class-notifier.php              # ❌ Система уведомлений
-│   ├── class-cleanup.php               # ❌ Утилиты очистки
-│   └── class-validator.php             # ❌ Валидация данных
-├── admin/                              # ✅ Админ интерфейс
-│   ├── class-admin.php                 # ❌ Главный контроллер
-│   ├── class-dashboard.php             # ❌ Dashboard контроллер
-│   ├── class-settings.php              # ❌ Settings контроллер
-│   ├── class-notifications.php         # ❌ Notifications контроллер
-│   ├── class-logs.php                  # ❌ Logs контроллер
-│   ├── templates/                      # ✅ HTML шаблоны
-│   │   ├── dashboard.php               # ❌ Dashboard панель
-│   │   ├── settings.php                # ❌ Страница настроек
-│   │   ├── notifications.php           # ❌ Шаблоны уведомлений
-│   │   └── logs.php                    # ❌ Просмотр логов
-│   └── assets/                         # ✅ CSS и JS
-│       ├── css/admin.css               # ❌ Стили админки
-│       └── js/admin.js                 # ❌ JS функциональность
-├── languages/                          # ✅ Переводы
-│   └── wp-visitor-notify.pot           # ❌ Шаблон переводов
-└── README.md                           # ✅ Описание проекта
+├── wp-visitor-notify.php               # ✅ Main plugin file
+├── includes/                           # ✅ Core PHP classes
+│   ├── class-plugin.php                # ✅ Main class (Singleton)
+│   ├── class-database.php              # ✅ Database operations
+│   ├── class-logger.php                # ✅ Logging system
+│   ├── class-uninstaller.php           # ✅ Uninstallation logic
+│   ├── class-tracker.php               # ❌ Visitor tracking
+│   ├── class-analytics.php             # ❌ Data analytics
+│   ├── class-detector.php              # ❌ Device detection
+│   ├── class-notifier.php              # ❌ Notification system
+│   ├── class-cleanup.php               # ❌ Cleanup utilities
+│   └── class-validator.php             # ❌ Data validation
+├── admin/                              # ✅ Admin interface
+│   ├── class-admin.php                 # ❌ Main controller
+│   ├── class-dashboard.php             # ❌ Dashboard controller
+│   ├── class-settings.php              # ❌ Settings controller
+│   ├── class-notifications.php         # ❌ Notifications controller
+│   ├── class-logs.php                  # ❌ Logs controller
+│   ├── templates/                      # ✅ HTML templates
+│   │   ├── dashboard.php               # ❌ Dashboard panel
+│   │   ├── settings.php                # ❌ Settings page
+│   │   ├── notifications.php           # ❌ Notification templates
+│   │   └── logs.php                    # ❌ Logs view
+│   └── assets/                         # ✅ CSS and JS
+│       ├── css/admin.css               # ❌ Admin styles
+│       └── js/admin.js                 # ❌ Admin JS functionality
+├── languages/                          # ✅ Translations
+│   └── wp-visitor-notify.pot           # ❌ Translation template
+└── README.md                           # ✅ Project description
 ```
 
-## Функции по файлам проекта
+## Project Files Functions
 
 ### `wp-visitor-notify.php` ✅
-- Метаданные плагина (название, версия, автор)
-- Проверка версии PHP 8.2+
-- Проверка версии WordPress 6.2+
-- Собственный автозагрузчик классов (без Composer)
-- Константы плагина (WPVN_VERSION, WPVN_PLUGIN_DIR и др.)
-- Функция инициализации wpvn_init()
-- Обертки хуков: wpvn_activate() -> Plugin::on_activation()
-- Обертки хуков: wpvn_deactivate() -> Plugin::on_deactivation()
-- Регистрация хука удаления плагина
+- Plugin metadata (name, version, author)
+- PHP 8.2+ version check
+- WordPress 6.2+ version check
+- Custom class autoloader (no Composer)
+- Plugin constants (WPVN_VERSION, WPVN_PLUGIN_DIR, etc.)
+- Initialization function wpvn_init()
+- Hook wrappers: wpvn_activate() -> Plugin::on_activation()
+- Hook wrappers: wpvn_deactivate() -> Plugin::on_deactivation()
+- Register uninstall hook
 
 ### `includes/class-plugin.php` ✅
 - Singleton pattern (get_instance, __construct, __clone, __wakeup)
-- Константы VERSION и PLUGIN_SLUG
-- Инициализация компонентов (init_logger, init_database)
-- Проверка инициализации (is_initialized)
-- Настройка базовых хуков WordPress
-- Создание админского меню
-- Подключение админских ресурсов
-- Регистрация настроек
-- Рендер админских страниц (dashboard, settings, notifications, logs)
-- Lifecycle методы: on_activation(), on_deactivation() (вызываются из главного файла)
-- Получение компонентов (get_component)
-- Получение версии плагина
+- Constants VERSION and PLUGIN_SLUG
+- Component initialization (init_logger, init_database)
+- Initialization check (is_initialized)
+- Basic WordPress hooks setup
+- Admin menu creation
+- Admin assets enqueue
+- Settings registration
+- Render admin pages (dashboard, settings, notifications, logs)
+- Lifecycle methods: on_activation(), on_deactivation() (called from main file)
+- Get components (get_component)
+- Get plugin version
 
 ### `includes/class-database.php` ✅
-- Инициализация подключения к БД
-- Определение имен таблиц с префиксом
-- Создание таблиц плагина
-- Проверка существования таблиц
-- Удаление таблиц
-- Получение версии БД
-- Получение списка таблиц
-- Получение объекта $wpdb
+- Database connection initialization
+- Table names with prefix
+- Plugin table creation
+- Table existence check
+- Table deletion
+- Get DB version
+- Get table list
+- Get $wpdb object
 
 ### `includes/class-logger.php` ✅
-- Конструктор с настройками уровня логирования
-- Основной метод log()
-- Методы debug(), info(), error()
-- Проверка уровня логирования (should_log)
-- Форматирование сообщений (format_message)
+- Constructor with log level settings
+- Main log() method
+- Methods debug(), info(), error()
+- Log level check (should_log)
+- Message formatting (format_message)
 
 ### `includes/class-uninstaller.php` ✅
-- Главный метод uninstall()
-- Удаление настроек плагина (remove_plugin_options)
-- ВАЖНО: НЕ удаляет данные посетителей (безопасность!)
-- Очистка cron событий (clear_cron_events)
-- Удаление capabilities (remove_capabilities)
-- Очистка transients (clear_transients)
-- Метод drop_database_tables_dangerous() (только для разработки!)
+- Main uninstall() method
+- Remove plugin options (remove_plugin_options)
+- IMPORTANT: Does NOT delete visitor data (for security!)
+- Clear cron events (clear_cron_events)
+- Remove capabilities (remove_capabilities)
+- Clear transients (clear_transients)
+- Method drop_database_tables_dangerous() (for development only!)
 
 ### `includes/class-tracker.php` ❌
-- Отслеживание визитов
-- Определение IP адреса
-- Хеширование IP
-- Определение User Agent
-- Определение referrer
-- Запись данных посетителя
-- Создание сессии посетителя
-- Подсчет просмотров страниц
-- Отслеживание времени на сайте
-- Фильтрация ботов
-- Исключение админов
-- Обработка AJAX запросов
+- Visit tracking
+- IP address detection
+- IP hashing
+- User Agent detection
+- Referrer detection
+- Visitor data recording
+- Visitor session creation
+- Page view counting
+- Time on site tracking
+- Bot filtering
+- Admin exclusion
+- AJAX request handling
 
 ### `includes/class-analytics.php` ❌
-- Получение статистики по дням/неделям/месяцам
-- Топ страниц по просмотрам
-- Статистика по устройствам
-- Статистика по браузерам
-- Геостатистика
-- Почасовая активность
-- Статистика referrer
-- Расчет bounce rate
-- Среднее время на сайте
-- Агрегация данных по часам
+- Get statistics by day/week/month
+- Top pages by views
+- Device statistics
+- Browser statistics
+- Geo statistics
+- Hourly activity
+- Referrer statistics
+- Bounce rate calculation
+- Average time on site
+- Data aggregation by hour
 
 ### `includes/class-detector.php` ❌
-- Определение браузера
-- Определение операционной системы
-- Определение типа устройства (desktop/mobile/tablet)
-- Определение версии браузера
-- Определение является ли бот
-- Получение разрешения экрана
-- Определение языка
-- Парсинг User Agent
+- Browser detection
+- Operating system detection
+- Device type detection (desktop/mobile/tablet)
+- Browser version detection
+- Bot detection
+- Screen resolution detection
+- Language detection
+- User Agent parsing
 
 ### `includes/class-notifier.php` ❌
-- Создание правила уведомления
-- Редактирование правила
-- Удаление правила
-- Проверка условий правил
-- Отправка email уведомлений
-- Запись истории уведомлений
-- Получение списка правил
-- Получение истории уведомлений
-- Валидация email адресов
+- Create notification rule
+- Edit rule
+- Delete rule
+- Rule condition checking
+- Send email notifications
+- Notification history recording
+- Get rule list
+- Get notification history
+- Email validation
 
 ### `includes/class-cleanup.php` ❌
-- Удаление старых записей (если разрешено)
-- Очистка временных файлов
-- Оптимизация таблиц БД
-- Сжатие старых данных
-- Очистка expired transients
+- Delete old records (if allowed)
+- Temporary file cleanup
+- DB table optimization
+- Old data compression
+- Expired transients cleanup
 
 ### `includes/class-validator.php` ❌
-- Валидация IP адресов
-- Валидация email адресов
-- Санитизация входных данных
-- Валидация настроек
-- Проверка прав доступа
-- Валидация форм
+- IP address validation
+- Email address validation
+- Input data sanitization
+- Settings validation
+- Access rights check
+- Form validation
 
 ### `admin/class-admin.php` ❌
-- Инициализация админского интерфейса
-- Подключение стилей и скриптов
-- Обработка AJAX запросов
-- Общие методы админки
-- Проверка прав доступа
-- Рендер общих элементов
+- Admin interface initialization
+- Styles and scripts enqueue
+- AJAX request handling
+- Common admin methods
+- Access rights check
+- Render common elements
 
 ### `admin/class-dashboard.php` ❌
-- Рендер страницы Dashboard
-- Получение данных для карточек статистики
-- Подготовка данных для графиков
-- Формирование таблицы топ страниц
-- Формирование таблицы последних посетителей
-- Обработка AJAX для обновления данных
+- Render Dashboard page
+- Get data for statistics cards
+- Prepare data for charts
+- Build top pages table
+- Build recent visitors table
+- AJAX data update handling
 
 ### `admin/class-settings.php` ❌
-- Рендер страницы настроек
-- Регистрация полей настроек
-- Валидация настроек
-- Сохранение настроек
-- Сброс настроек к умолчанию
-- Экспорт/импорт настроек
+- Render settings page
+- Register settings fields
+- Settings validation
+- Save settings
+- Reset settings to default
+- Export/import settings
 
 ### `admin/class-notifications.php` ❌
-- Рендер страницы уведомлений
-- Форма создания правила
-- Таблица правил уведомлений
-- Таблица истории уведомлений
-- Редактирование правил
-- Тестирование уведомлений
+- Render notifications page
+- Rule creation form
+- Notification rules table
+- Notification history table
+- Edit rules
+- Test notifications
 
 ### `admin/class-logs.php` ❌
-- Рендер страницы логов
-- Фильтрация логов
-- Поиск в логах
-- Экспорт логов в CSV
-- Очистка логов
-- Пагинация логов
+- Render logs page
+- Log filtering
+- Log search
+- Export logs to CSV
+- Clear logs
+- Log pagination
 
 ### `admin/templates/dashboard.php` ❌
-- HTML разметка Dashboard
-- Карточки статистики
-- График активности
-- Таблица топ страниц
-- Таблица последних посетителей
+- Dashboard HTML markup
+- Statistics cards
+- Activity chart
+- Top pages table
+- Recent visitors table
 
 ### `admin/templates/settings.php` ❌
-- HTML форма настроек
-- Секции настроек
-- Поля форм
-- Кнопки сохранения
+- Settings form HTML
+- Settings sections
+- Form fields
+- Save buttons
 
 ### `admin/templates/notifications.php` ❌
-- HTML таблица правил
-- HTML форма создания правила
-- HTML таблица истории
+- Rules table HTML
+- Rule creation form HTML
+- Notification history table HTML
 
 ### `admin/templates/logs.php` ❌
-- HTML панель фильтров
-- HTML таблица логов
-- HTML кнопки управления
+- Filter panel HTML
+- Logs table HTML
+- Control buttons HTML
 
 ### `admin/assets/css/admin.css` ❌
-- Стили карточек статистики
-- Стили таблиц
-- Стили форм
-- Стили кнопок
-- Адаптивные стили
+- Statistics card styles
+- Table styles
+- Form styles
+- Button styles
+- Responsive styles
 
 ### `admin/assets/js/admin.js` ❌
-- Инициализация Chart.js
-- Инициализация DataTables
-- AJAX обновление данных
-- Обработка форм
-- Интерактивность элементов
+- Chart.js initialization
+- DataTables initialization
+- AJAX data update
+- Form handling
+- Element interactivity
 
 ### `languages/wp-visitor-notify.pot` ❌
-- Строки для перевода
-- Контекст переводов
-- Плюрализация
+- Translation strings
+- Translation context
+- Pluralization
 
-### Основные файлы
+### Main Files
 
 #### `wp-visitor-notify.php` ✅
-**Главный файл плагина - точка входа**
-- Метаданные плагина (название, версия, автор, требования)
-- Проверка версий PHP (8.2+) и WordPress (6.2+)
-- Собственный автозагрузчик классов без Composer (namespace WPVN)
-- Глобальные константы (WPVN_VERSION, WPVN_PLUGIN_DIR и др.)
-- Обертки lifecycle хуков (делегируют работу классам Plugin и Uninstaller)
-- Инициализация Plugin singleton через `wpvn_init()`
+**Main plugin file - entry point**
+- Plugin metadata (name, version, author, requirements)
+- PHP (8.2+) and WordPress (6.2+) version checks
+- Custom class autoloader without Composer (namespace WPVN)
+- Global constants (WPVN_VERSION, WPVN_PLUGIN_DIR, etc.)
+- Lifecycle hook wrappers (delegate to Plugin and Uninstaller classes)
+- Plugin singleton initialization via `wpvn_init()`
 
 #### `README.md` ✅
-**Описание проекта для GitHub**
-- Краткое описание плагина
-- Системные требования
-- Ключевые особенности
-- Структура файлов с отметками статуса (✅/❌)
-- Инструкции по установке и разработке
+**Project description for GitHub**
+- Short plugin description
+- System requirements
+- Key features
+- File structure with status marks (✅/❌)
+- Installation and development instructions
 
-### Папка `includes/` - Ядро классов
+### `includes/` folder - Core classes
 
 #### `class-plugin.php` ✅
-**Главный класс плагина (Singleton)**
-- Константы: VERSION='1.0.0', PLUGIN_SLUG='wp-visitor-notify'
-- Singleton pattern с `get_instance()`, запрет клонирования
-- Dependency injection для компонентов (database, logger)
-- Базовые хуки WordPress (admin_menu, enqueue_scripts)
-- Заглушки админских страниц (dashboard, settings, notifications, logs)
-- Lifecycle методы: `on_activation()`, `on_deactivation()` (реальная логика активации/деактивации)
+**Main plugin class (Singleton)**
+- Constants: VERSION='1.0.0', PLUGIN_SLUG='wp-visitor-notify'
+- Singleton pattern with `get_instance()`, cloning forbidden
+- Dependency injection for components (database, logger)
+- Basic WordPress hooks (admin_menu, enqueue_scripts)
+- Admin page stubs (dashboard, settings, notifications, logs)
+- Lifecycle methods: `on_activation()`, `on_deactivation()` (actual activation/deactivation logic)
 
 #### `class-database.php` ✅
-**Упрощенный класс базы данных**
-- Константа DB_VERSION='1.0.0'
-- Определение имен таблиц с префиксом WordPress
-- Заготовленные схемы таблиц (sessions, page_views, notification_rules и др.)
-- Простая проверка `tables_exist()` через опцию `wpvn_db_version`
-- Методы `create_tables()` и `drop_tables()` (пока упрощенные)
+**Simplified database class**
+- Constant DB_VERSION='1.0.0'
+- Table names with WordPress prefix
+- Table schemas prepared (sessions, page_views, notification_rules, etc.)
+- Simple `tables_exist()` check via `wpvn_db_version` option
+- Methods `create_tables()` and `drop_tables()` (simplified for now)
 
 #### `class-logger.php` ✅
-**Система логирования без базы данных**
-- Уровни: debug, info, error
-- Запись в PHP error_log (видно в Docker)
-- Формат: `[timestamp] WPVN.LEVEL[component]: message | Context: {json}`
-- Фильтрация по уровню важности
-- Методы: `log()`, `debug()`, `info()`, `error()`
+**Logging system without database**
+- Levels: debug, info, error
+- Write to PHP error_log (visible in Docker)
+- Format: `[timestamp] WPVN.LEVEL[component]: message | Context: {json}`
+- Log level filtering
+- Methods: `log()`, `debug()`, `info()`, `error()`
 
 #### `class-uninstaller.php` ✅
-**Полная очистка при удалении плагина**
-- Статический метод `uninstall()` для register_uninstall_hook
-- Удаление всех опций плагина
-- Удаление всех таблиц БД
-- Очистка cron событий (планируется 2 события):
-  - `wpvn_hourly_aggregation` - подсчет статистики по часам
-  - `wpvn_notification_check` - проверка правил уведомлений каждые 5 минут
-- Очистка transients с префиксом wpvn_
+**Full cleanup on plugin removal**
+- Static method `uninstall()` for register_uninstall_hook
+- Remove all plugin options
+- Remove all DB tables
+- Clear cron events (2 planned events):
+  - `wpvn_hourly_aggregation` - hourly statistics aggregation
+  - `wpvn_notification_check` - notification rules check every 5 minutes
+- Clear transients with wpvn_ prefix
 
-### Папка `admin/` - Админ интерфейс
+### `admin/` folder - Admin interface
 
-#### `assets/css/admin.css` ❌ (планируется)
-**Стили админки**
-- Оформление админских страниц
+#### `assets/css/admin.css` ❌ (planned)
+**Admin styles**
+- Admin page styling
 
-#### `assets/js/admin.js` ❌ (планируется)
-**JavaScript админки**
-- Интерактивность админки
+#### `assets/js/admin.js` ❌ (planned)
+**Admin JavaScript**
+- Admin interactivity
 
-#### `templates/` ✅ (пустая)
-**HTML шаблоны админских страниц**
-- Планируется: dashboard.php, settings.php, notifications.php, logs.php
+#### `templates/` ✅ (empty)
+**Admin page HTML templates**
+- Planned: dashboard.php, settings.php, notifications.php, logs.php
 
-## Содержимое админских страниц
+## Admin Pages Content
 
-### Dashboard (главная страница)
-**Виджеты и таблицы:**
-- **Статистика карточки** (4 блока): Сегодня, Эта неделя, Этот месяц - количество посетителей
-- **График активности** (Chart.js): Почасовая активность за последние 24 часа
-- **Таблица "Топ страниц"** (DataTable): URL, Заголовок, Просмотры
-- **Таблица "Последние посетители"** (DataTable): Время, IP, Страница, Устройство, Браузер, Город, Страна
-- **Блок уведомлений** (WordPress notices): Важные алерты и системные сообщения
+### Dashboard (main page)
+**Widgets and Tables:**
+- **Statistics Cards** (4 blocks): Today, This Week, This Month - visitor count
+- **Activity Graph** (Chart.js): Hourly activity for the last 24 hours
+- **Top Pages Table** (DataTable): URL, Title, Views
+- **Recent Visitors Table** (DataTable): Time, IP, Page, Device, Browser, City, Country
+- **Notifications Block** (WordPress notices): Important alerts and system messages
 
-### Settings (настройки)
-**Форма настроек WordPress Settings API:**
-- **Секция "Отслеживание"**: Checkbox включить/выключить, Select периодичность записи
-- **Секция "Приватность"**: Checkbox хешировать IP, Select уровень анонимизации
-- **Секция "Уведомления"**: Email field для алертов, Number input частота проверки
-- **Секция "Хранение данных"**: Number input дней хранения (только для отображения), Info текст "Данные хранятся постоянно для безопасности"
-- **Секция "Исключения"**: Textarea для IP, Checkbox исключить админов/ботов
-- **Кнопки**: Save Settings, Reset to Defaults
+### Settings
+**WordPress Settings API Form:**
+- **Tracking Section**: Checkbox enable/disable, Select recording frequency
+- **Privacy Section**: Checkbox hash IP, Select anonymization level
+- **Notifications Section**: Email field for alerts, Number input check frequency
+- **Data Storage Section**: Number input days to keep (display only), Info text "Data is stored permanently for security"
+- **Exceptions Section**: Textarea for IP, Checkbox exclude admins/bots
+- **Buttons**: Save Settings, Reset to Defaults
 
-### Notifications (уведомления)
-**Две основные части:**
-- **Таблица "Правила уведомлений"** (DataTable): Название правила, Условие, Email, Статус, Действия (Редактировать/Удалить)
-- **Форма создания правила**: Select тип события, Number field порог, Email field получатель, Textarea шаблон сообщения
-- **Таблица "История уведомлений"** (DataTable): Дата/время, Правило, Получатель, Статус доставки, Сообщение
+### Notifications
+**Two main parts:**
+- **Notification Rules Table** (DataTable): Rule Name, Condition, Email, Status, Actions (Edit/Delete)
+- **Rule Creation Form**: Select event type, Number field threshold, Email field recipient, Textarea message template
+- **Notification History Table** (DataTable): Date/Time, Rule, Recipient, Delivery Status, Message
 
-### Logs (логи)
-**Фильтры и таблица:**
-- **Панель фильтров**: Select уровень лога, Date picker период, Text input поиск по сообщению
-- **Таблица логов** (DataTable): Время, Уровень (цветные badges), Компонент, Сообщение, Контекст (JSON в модальном окне)
-- **Кнопки управления**: Clear All Logs, Export CSV, Refresh
-- **Pagination**: WordPress стандартная пагинация
+### Logs
+**Filters and Table:**
+- **Filter Panel**: Select log level, Date picker period, Text input message search
+- **Logs Table** (DataTable): Time, Level (colored badges), Component, Message, Context (JSON in modal window)
+- **Control Buttons**: Clear All Logs, Export CSV, Refresh
+- **Pagination**: WordPress standard pagination
 
-### Папка `languages/` ✅ (пустая)
-**Файлы переводов**
-- Планируется: wp-visitor-notify.pot для интернационализации
+### `languages/` folder ✅ (empty)
+**Translation files**
+- Planned: wp-visitor-notify.pot for internationalization
 
-## Архитектурные правила проекта
+## Architectural Project Rules
 
-### 1. Собственный автозагрузчик классов
-- **БЕЗ Composer** - используем свой автозагрузчик
-- Классы именуются: `class-название.php`
-- Namespace: `WPVN\ИмяКласса`
-- Загрузка: `includes/class-{имя-класса}.php`
+### 1. Custom Class Autoloader
+- **NO Composer** – use our own autoloader
+- Classes are named: `class-name.php`
+- Namespace: `WPVN\ClassName`
+- Loading: `includes/class-{class-name}.php`
 
-### 2. Singleton паттерн для главного класса
-- `Plugin::get_instance()` - единственный способ получить экземпляр
-- Запрещено клонирование и сериализация
-- Инициализация только через `init()` метод
+### 2. Singleton Pattern for Main Class
+- `Plugin::get_instance()` – the only way to get an instance
+- Cloning and serialization are forbidden
+- Initialization only via the `init()` method
 
-### 3. Система логирования
-- **БЕЗ базы данных** - логи идут в `error_log`
-- Уровни: `debug`, `info`, `error`
-- Формат: `[timestamp] WPVN.LEVEL[component]: message | Context: {json}`
-- Видно в Docker логах
+### 3. Logging System
+- **NO database** – logs go to `error_log`
+- Levels: `debug`, `info`, `error`
+- Format: `[timestamp] WPVN.LEVEL[component]: message | Context: {json}`
+- Visible in Docker logs
 
-### 4. Упрощенная база данных
-- Пока создается только версия в опциях
-- Схемы таблиц готовы, но не используются
-- `Database::tables_exist()` проверяет опцию `wpvn_db_version`
+### 4. Simplified Database
+- For now, only the version is created in options
+- Table schemas are ready but not used
+- `Database::tables_exist()` checks the `wpvn_db_version` option
 
-### 5. Требования версий
-- **PHP 8.2+** - строгая типизация
-- **WordPress 6.2+** - современные функции
-- `declare(strict_types=1);` во всех файлах
+### 5. Version Requirements
+- **PHP 8.2+** – strict typing
+- **WordPress 6.2+** – modern functions
+- `declare(strict_types=1);` in all files
 
-### 6. Структура админки
-- Меню: "Visitor Analytics" с подменю
-- Страницы: Dashboard, Settings, Notifications, Logs
-- Пока заглушки с базовым HTML
+### 6. Admin Structure
+- Menu: "Visitor Analytics" with submenus
+- Pages: Dashboard, Settings, Notifications, Logs
+- Currently stubs with basic HTML
 - Capability: `manage_options`
 
-### 7. Lifecycle хуки
-- **Активация**: `register_activation_hook() -> wpvn_activate() -> Plugin::on_activation()`
-- **Деактивация**: `register_deactivation_hook() -> wpvn_deactivate() -> Plugin::on_deactivation()`
-- **Удаление**: `register_uninstall_hook() -> Uninstaller::uninstall()` (удаляет настройки, сохраняет данные)
+### 7. Lifecycle Hooks
+- **Activation**: `register_activation_hook() -> wpvn_activate() -> Plugin::on_activation()`
+- **Deactivation**: `register_deactivation_hook() -> wpvn_deactivate() -> Plugin::on_deactivation()`
+- **Uninstall**: `register_uninstall_hook() -> Uninstaller::uninstall()` (removes settings, preserves data)
 
-### 8. Система безопасности
-- Проверка `ABSPATH` во всех файлах
-- Escape всех выводов
-- Capability проверки
-- Защита от прямого доступа
+### 8. Security System
+- `ABSPATH` check in all files
+- Escape all outputs
+- Capability checks
+- Protection from direct access
 
-### 9. Продакшен окружение
-- Только WordPress сайт
-- Стандартная установка через админку
-- Поддержка хостингов
+### 9. Production Environment
+- Only WordPress site
+- Standard installation via admin panel
+- Hosting support
 
-### 10. Тестирование
-- Собственный тест-раннер
-- Тесты логгера и других компонентов
-- Без PHPUnit - простые assert'ы
+### 10. Testing
+- Custom test runner
+- Logger and other components tests
+- No PHPUnit - simple asserts
 
-## Константы проекта
+## Project Constants
 
 ```php
 WPVN_VERSION = '1.0.0'
@@ -404,27 +404,27 @@ WPVN_PLUGIN_URL = plugin_dir_url(__FILE__)
 WPVN_PLUGIN_BASENAME = plugin_basename(__FILE__)
 ```
 
-## Git правила
+## Git Rules
 
-- Исключены файлы разработки (.vscode/, test/, docker-*)
-- Логи исключены
-- Системные файлы исключены
+- Development files are excluded (.vscode/, test/, docker-*)
+- Logs are excluded
+- System files are excluded
 
-## Следующие этапы разработки
+## Next Development Stages
 
-1. **Создать класс Tracker** - отслеживание посетителей
-2. **Создать класс Analytics** - обработка данных
-3. **Создать класс Detector** - определение устройств
-4. **Создать класс Notifier** - уведомления
-5. **Реализовать админские шаблоны**
-6. **Добавить CSS/JS ресурсы**
-7. **Реализовать полную схему БД**
-8. **Добавить переводы**
+1. **Create Tracker Class** - visitor tracking
+2. **Create Analytics Class** - data processing
+3. **Create Detector Class** - device detection
+4. **Create Notifier Class** - notifications
+5. **Implement Admin Templates**
+6. **Add CSS/JS Resources**
+7. **Implement Full DB Schema**
+8. **Add Translations**
 
-## Принципы кода
+## Code Principles
 
-- **Простота** - никаких сложных паттернов без необходимости
-- **Читаемость** - обширные комментарии на русском/английском
-- **Безопасность** - escape, validate, sanitize
-- **Производительность** - ленивая загрузка компонентов
-- **Тестируемость** - dependency injection через конструкторы
+- **Simplicity** - no complex patterns without necessity
+- **Readability** - extensive comments in English
+- **Security** - escape, validate, sanitize
+- **Performance** - lazy loading of components
+- **Testability** - dependency injection through constructors

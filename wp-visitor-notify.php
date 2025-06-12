@@ -27,15 +27,13 @@ if (!defined('ABSPATH')) {
 }
 
 // Plugin constants
-// Определяем глобальные константы для использования по всему плагину
 define('WPVN_VERSION', '1.0.0');
 define('WPVN_PLUGIN_FILE', __FILE__);
 define('WPVN_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('WPVN_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('WPVN_PLUGIN_BASENAME', plugin_basename(__FILE__));
 
-// Check PHP version
-// Проверяем версию PHP - если меньше 8.2, показываем ошибку и останавливаем загрузку
+// Check PHP version - if less than 8.2, show error and stop loading
 if (version_compare(PHP_VERSION, '8.2', '<')) {
     add_action('admin_notices', function () {
         echo '<div class="notice notice-error"><p>';
@@ -46,8 +44,7 @@ if (version_compare(PHP_VERSION, '8.2', '<')) {
     return;
 }
 
-// Check WordPress version
-// Проверяем версию WordPress - если меньше 6.2, показываем ошибку и останавливаем загрузку
+// Check WordPress version - if less than 6.2, show error and stop loading
 global $wp_version;
 if (version_compare($wp_version, '6.2', '<')) {
     add_action('admin_notices', function () {
@@ -58,18 +55,17 @@ if (version_compare($wp_version, '6.2', '<')) {
     return;
 }
 
-// СОБСТВЕННЫЙ АВТОЗАГРУЗЧИК
-// Регистрируем функцию для автоматической загрузки наших классов при их использовании
+// CUSTOM AUTOLOADER
 spl_autoload_register(function ($class) {
-    // Проверяем, что класс принадлежит нашему namespace
+    // Check that the class belongs to our namespace
     if (strpos($class, 'WPVN\\') === 0) {
-        // Убираем namespace и заменяем подчеркивания на дефисы
+        // Remove namespace and replace underscores with hyphens
         $class_name = str_replace(['WPVN\\', '_'], ['', '-'], $class);
         
-        // Формируем путь к файлу класса
+        // Form the path to the class file
         $file = WPVN_PLUGIN_DIR . 'includes/class-' . strtolower($class_name) . '.php';
         
-        // Загружаем файл, если он существует
+        // Load the file if it exists
         if (file_exists($file)) {
             require_once $file;
         }
@@ -77,42 +73,37 @@ spl_autoload_register(function ($class) {
 });
 
 // Initialize the plugin
-// Создаем экземпляр главного класса через Singleton pattern и инициализируем
+// Create an instance of the main class through Singleton pattern and initialize
 function wpvn_init(): void {
-    // Получаем единственный экземпляр плагина
+    // Get the single instance of the plugin
     $plugin = WPVN\Plugin::get_instance();
     
-    // Инициализируем все компоненты
+    // Initialize all components
     $plugin->init();
 }
 
-// Hook into WordPress
-// Запускаем плагин после загрузки всех плагинов WordPress
+// Start the plugin after all WordPress plugins are loaded
 add_action('plugins_loaded', 'wpvn_init');
 
 // Activation hook
-// Срабатывает при нажатии "Активировать" в админке
 register_activation_hook(__FILE__, 'wpvn_activate');
 function wpvn_activate(): void {
-    // Получаем экземпляр плагина
+    // Get the plugin instance
     $plugin = WPVN\Plugin::get_instance();
     
-    // Выполняем процедуры активации
+    // Execute activation procedures
     $plugin->on_activation();
 }
 
 // Deactivation hook
-// Срабатывает при нажатии "Деактивировать" в админке  
 register_deactivation_hook(__FILE__, 'wpvn_deactivate');
 function wpvn_deactivate(): void {
-    // Получаем экземпляр плагина
+    // Get the plugin instance
     $plugin = WPVN\Plugin::get_instance();
     
-    // Выполняем процедуры деактивации
+    // Execute deactivation procedures
     $plugin->on_deactivation();
 }
 
 // Uninstall hook
-// Срабатывает при полном удалении плагина - удаляем только настройки плагина
-// ВАЖНО: Данные посетителей сохраняются для анализа безопасности!
 register_uninstall_hook(__FILE__, ['WPVN\Uninstaller', 'uninstall']);

@@ -68,41 +68,6 @@ class Plugin {
      */
     private ?Database $database = null;
 
-    /**
-     * Visitor tracking engine
-     * TODO: Будет добавлен когда создадим класс Tracker
-     *
-     * @since 1.0.0
-     * @var object|null
-     */
-    private ?object $tracker = null;
-
-    /**
-     * Analytics data processor
-     * TODO: Будет добавлен когда создадим класс Analytics
-     *
-     * @since 1.0.0
-     * @var object|null
-     */
-    private ?object $analytics = null;
-
-    /**
-     * Device/browser detection
-     * TODO: Будет добавлен когда создадим класс Detector
-     *
-     * @since 1.0.0
-     * @var object|null
-     */
-    private ?object $detector = null;
-
-    /**
-     * Notification engine
-     * TODO: Будет добавлен когда создадим класс Notifier
-     *
-     * @since 1.0.0
-     * @var object|null
-     */
-    private ?object $notifier = null;
 
     /**
      * Logging system
@@ -171,18 +136,12 @@ class Plugin {
             $this->init_logger();
             $this->init_database();
             
-            // TODO: Добавим позже когда создадим эти классы
-            // $this->init_detector();
-            // $this->init_analytics();
-            // $this->init_tracker();
-            // $this->init_notifier();
+            // Additional components will be added in future versions
 
             // Set up WordPress hooks (только базовые пока)
             $this->setup_basic_hooks();
 
-            // Load language files for internationalization
-            // TODO: Добавим когда будем готовы к переводам
-            // $this->load_textdomain();
+            // Load language files for internationalization (planned)
 
             // Mark as initialized
             $this->is_initialized = true;
@@ -246,72 +205,7 @@ class Plugin {
             }        }
     }
 
-    /**
-     * Initialize device/browser detector
-     * TODO: Создадим когда будем готовы
-     *
-     * @since 1.0.0
-     * @return void
-     */
-    /*
-    private function init_detector(): void {
-        if (null === $this->detector) {
-            $this->detector = new Detector($this->logger);
-        }
-    }
-    */
-
-    /**
-     * Initialize analytics processor
-     * TODO: Создадим когда будем готовы
-     *
-     * @since 1.0.0
-     * @return void
-     */
-    /*
-    private function init_analytics(): void {
-        if (null === $this->analytics) {
-            $this->analytics = new Analytics($this->database, $this->logger);
-        }
-    }
-    */
-
-    /**
-     * Initialize visitor tracker
-     * TODO: Создадим когда будем готовы
-     *
-     * @since 1.0.0
-     * @return void
-     */
-    /*
-    private function init_tracker(): void {
-        if (null === $this->tracker) {
-            $this->tracker = new Tracker(
-                $this->database,
-                $this->detector,
-                $this->logger
-            );
-        }
-    }
-    */
-
-    /**
-     * Initialize notification system
-     * TODO: Создадим когда будем готовы
-     *
-     * @since 1.0.0
-     * @return void
-     */
-    /*
-    private function init_notifier(): void {
-        if (null === $this->notifier) {
-            $this->notifier = new Notifier(
-                $this->database,
-                $this->analytics,
-                $this->logger
-            );        }
-    }
-    */
+    /* Placeholder methods for future components were removed */
 
     /**
      * Set up basic WordPress hooks and filters
@@ -336,41 +230,17 @@ class Plugin {
         }
 
         // NOTE: Lifecycle hooks are registered in main plugin file to avoid duplication
-        
-        // TODO: Добавим позже когда создадим нужные классы
-        /*
-        // Frontend tracking hooks (только для не-админ страниц)
-        if (!\is_admin()) {
-            \add_action('wp_head', [$this->tracker, 'enqueue_tracking_script'], 10);
-            \add_action('wp_footer', [$this->tracker, 'render_tracking_code'], 20);
-        }
 
-        // AJAX hooks для трекинга данных
-        \add_action('wp_ajax_wpvn_track_page', [$this->tracker, 'handle_ajax_tracking']);
-        \add_action('wp_ajax_nopriv_wpvn_track_page', [$this->tracker, 'handle_ajax_tracking']);
-
-        // Cron jobs для фоновой обработки
-        \add_action('wpvn_daily_cleanup', [$this->database, 'cleanup_old_data']);
-        \add_action('wpvn_hourly_aggregation', [$this->analytics, 'update_aggregated_data']);        \add_action('wpvn_notification_check', [$this->notifier, 'check_notification_rules']);
-        */
+        // Additional frontend and cron hooks will be added in future versions
     }
 
     /**
      * Load plugin text domain for internationalization
-     * TODO: Добавим когда будем готовы к переводам
      *
      * @since 1.0.0
      * @return void
      */
-    /*
-    private function load_textdomain(): void {
-        \load_plugin_textdomain(
-            self::PLUGIN_SLUG,
-            false,
-            \dirname(\plugin_basename(WPVN_PLUGIN_FILE)) . '/languages'
-        );
-    }
-    */
+    /* Textdomain loading will be implemented when translations are available */
 
     /**
      * Set up admin menu pages
@@ -428,56 +298,26 @@ class Plugin {
 
     /**
      * Enqueue admin assets (CSS and JavaScript)
-     * Пока заглушка - добавим позже
      *
      * @since 1.0.0
      * @param string $hook The current admin page hook
      * @return void
      */
     public function enqueue_admin_assets(string $hook): void {
-        // TODO: Добавим когда создадим CSS/JS файлы
-        // Method ready for asset enqueuing when needed
+        // Assets will be enqueued here when implemented
     }
 
     /**
      * Register plugin settings
-     * Пока заглушка - добавим позже
      *
      * @since 1.0.0
      * @return void
      */
     public function register_settings(): void {
-        // TODO: Добавим настройки позже        // Method ready for WordPress Settings API integration
+        // Settings registration will be added later
     }
 
-    /**
-     * TODO: Методы настроек - добавим позже когда будем готовы
-     */
-    
-    /*
-    private function register_tracking_settings(): void {
-        // ...код настроек трекинга...
-    }
-
-    private function register_privacy_settings(): void {
-        // ...код настроек приватности...
-    }
-
-    private function register_notification_settings(): void {
-        // ...код настроек уведомлений...
-    }
-
-    public function render_checkbox_field(array $args): void {
-        // ...код чекбокса...
-    }
-
-    public function render_email_field(array $args): void {
-        // ...код email поля...
-    }
-
-    public function validate_settings(array $input): array {
-        // ...код валидации...    }
-    */
+    /* Placeholder settings helpers removed */
 
     /**
      * Plugin activation handler
@@ -522,34 +362,10 @@ class Plugin {
         if ($this->logger) {
             $this->logger->log('Plugin deactivated', 'info');
         }        
-        // TODO: Добавим очистку cron-задач когда они будут
-        // TODO: Добавим flush_rewrite_rules() когда будет нужно
+        // Cron cleanup will be added when scheduled tasks are implemented
     }
 
-    /**
-     * Schedule cron events
-     * TODO: Добавим когда будем готовы к фоновым задачам
-     *
-     * @since 1.0.0
-     * @return void
-     */
-    /*
-    private function schedule_cron_events(): void {
-        // Daily cleanup task
-        if (!\wp_next_scheduled('wpvn_daily_cleanup')) {
-            \wp_schedule_event(\time(), 'daily', 'wpvn_daily_cleanup');
-        }
-
-        // Hourly analytics aggregation
-        if (!\wp_next_scheduled('wpvn_hourly_aggregation')) {
-            \wp_schedule_event(\time(), 'hourly', 'wpvn_hourly_aggregation');
-        }
-
-        // Notification checks every 5 minutes
-        if (!\wp_next_scheduled('wpvn_notification_check')) {
-            \wp_schedule_event(\time(), 'wpvn_5min', 'wpvn_notification_check');
-        }    }
-    */
+    /* Placeholder cron scheduling method removed */
 
     /**
      * Render dashboard admin page
@@ -637,14 +453,6 @@ class Plugin {
         switch ($component) {
             case 'database':
                 return $this->database;
-            case 'tracker':
-                return $this->tracker;
-            case 'analytics':
-                return $this->analytics;
-            case 'detector':
-                return $this->detector;
-            case 'notifier':
-                return $this->notifier;
             case 'logger':
                 return $this->logger;
             default:
