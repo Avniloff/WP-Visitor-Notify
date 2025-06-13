@@ -21,6 +21,8 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+use WPVN\Admin\Admin as AdminInterface;
+
 /**
  * Main Plugin class
  *
@@ -79,6 +81,38 @@ class Plugin {
     private ?Logger $logger = null;
 
     /**
+     * Device and browser detector
+     *
+     * @since 1.0.0
+     * @var Detector|null
+     */
+    private ?Detector $detector = null;
+
+    /**
+     * Visitor tracker
+     *
+     * @since 1.0.0
+     * @var Tracker|null
+     */
+    private ?Tracker $tracker = null;
+
+    /**
+     * Analytics engine
+     *
+     * @since 1.0.0
+     * @var Analytics|null
+     */
+    private ?Analytics $analytics = null;
+
+    /**
+     * Admin interface controller
+     *
+     * @since 1.0.0
+     * @var AdminInterface|null
+     */
+    private ?AdminInterface $admin = null;
+
+    /**
      * Plugin initialization flag
      *
      * @since 1.0.0
@@ -133,25 +167,28 @@ class Plugin {
 
         try {
             // Initialize core components in dependency order
-            // Initialize only the basic components for learning purposes
             $this->init_logger();
             $this->init_database();
-            
-            // Additional components will be added in future versions
+            $this->init_detector();
+            $this->init_tracker();
+            $this->init_analytics();
+            $this->init_admin();
 
-            // Set up basic WordPress hooks for now
+            // Set up WordPress hooks
             $this->setup_basic_hooks();
+            $this->setup_frontend_hooks();
 
-            // Load language files for internationalization (planned)
+            // Load language files
+            $this->load_textdomain();
 
             // Mark as initialized
             $this->is_initialized = true;
 
             // Log successful initialization
-            $this->logger->log('Plugin initialized successfully (basic mode)', 'info', [
+            $this->logger->log('Plugin initialized successfully', 'info', [
                 'version' => self::VERSION,
                 'php_version' => \PHP_VERSION,
-                'components_loaded' => ['logger', 'database']
+                'components_loaded' => ['logger', 'database', 'detector', 'tracker', 'analytics', 'admin']
             ]);
 
         } catch (\Exception $e) {
@@ -203,7 +240,45 @@ class Plugin {
                 if (!$success) {
                     throw new \Exception('Failed to create database tables');
                 }
-            }        }
+            }
+        }
+    }
+
+    /**
+     * Initialize device detector
+     */
+    private function init_detector(): void {
+        if (null === $this->detector) {
+            $this->detector = new Detector();
+        }
+    }
+
+    /**
+     * Initialize tracker component
+     */
+    private function init_tracker(): void {
+        if (null === $this->tracker && $this->database && $this->detector && $this->logger) {
+            $this->tracker = new Tracker($this->database, $this->detector, $this->logger);
+        }
+    }
+
+    /**
+     * Initialize analytics engine
+     */
+    private function init_analytics(): void {
+        if (null === $this->analytics && $this->database) {
+            $this->analytics = new Analytics($this->database);
+        }
+    }
+
+    /**
+     * Initialize admin interface
+     */
+    private function init_admin(): void {
+        if (is_admin() && null === $this->admin && $this->analytics) {
+            $this->admin = new AdminInterface($this, $this->analytics);
+            $this->admin->init();
+        }
     }
 
     /* Placeholder methods for future components were removed */
@@ -236,12 +311,23 @@ class Plugin {
     }
 
     /**
+     * Set up front-end hooks for tracking.
+     */
+    private function setup_frontend_hooks(): void {
+        if ($this->tracker) {
+            add_action('wp_head', [$this->tracker, 'track_visit']);
+        }
+    }
+
+    /**
      * Load plugin text domain for internationalization
      *
      * @since 1.0.0
      * @return void
      */
-    /* Textdomain loading will be implemented when translations are available */
+    private function load_textdomain(): void {
+        load_plugin_textdomain(self::PLUGIN_SLUG, false, dirname(WPVN_PLUGIN_BASENAME) . '/languages');
+    }
 
     /**
      * Set up admin menu pages
@@ -253,6 +339,10 @@ class Plugin {
      * @return void
      */
     public function setup_admin_menu(): void {
+        if ($this->admin) {
+            $this->admin->register_menu();
+            return;
+        }
         // Check user capabilities
         if (!\current_user_can('manage_options')) {
             return;
@@ -305,7 +395,10 @@ class Plugin {
      * @return void
      */
     public function enqueue_admin_assets(string $hook): void {
-        // Assets will be enqueued here when implemented
+        if ($this->admin) {
+            $this->admin->enqueue_assets($hook);
+            return;
+        }
     }
 
     /**
@@ -315,7 +408,10 @@ class Plugin {
      * @return void
      */
     public function register_settings(): void {
-        // Settings registration will be added later
+        if ($this->admin) {
+            $this->admin->register_settings();
+            return;
+        }
     }
 
     /* Placeholder settings helpers removed */
@@ -376,18 +472,11 @@ class Plugin {
      * @return void
      */
     public function render_dashboard_page(): void {
-        echo '<div class="wrap">';
-        echo '<h1>' . \esc_html__('WP Visitor Notify Dashboard', 'wp-visitor-notify') . '</h1>';
-        echo '<p>Welcome to WP Visitor Notify! This is a basic version for learning.</p>';
-        
-        // Show database status
-        if ($this->database && $this->database->tables_exist()) {
-            echo '<div class="notice notice-success"><p>✅ Database initialized correctly!</p></div>';
-        } else {
-            echo '<div class="notice notice-error"><p>❌ Database problem!</p></div>';
+        if ($this->admin) {
+            $this->admin->render_dashboard();
+            return;
         }
-        
-        echo '</div>';
+        echo '<div class="wrap"><h1>' . esc_html__('WP Visitor Notify Dashboard', 'wp-visitor-notify') . '</h1></div>';
     }
 
     /**
@@ -398,10 +487,11 @@ class Plugin {
      * @return void
      */
     public function render_settings_page(): void {
-        echo '<div class="wrap">';
-        echo '<h1>' . \esc_html__('Settings', 'wp-visitor-notify') . '</h1>';
-        echo '<p>Settings will be added later.</p>';
-        echo '</div>';
+        if ($this->admin) {
+            $this->admin->render_settings();
+            return;
+        }
+        echo '<div class="wrap"><h1>' . esc_html__('Settings', 'wp-visitor-notify') . '</h1></div>';
     }
 
     /**
@@ -412,10 +502,11 @@ class Plugin {
      * @return void
      */
     public function render_notifications_page(): void {
-        echo '<div class="wrap">';
-        echo '<h1>' . \esc_html__('Notifications', 'wp-visitor-notify') . '</h1>';
-        echo '<p>Notifications will be added later.</p>';
-        echo '</div>';
+        if ($this->admin) {
+            $this->admin->render_notifications();
+            return;
+        }
+        echo '<div class="wrap"><h1>' . esc_html__('Notifications', 'wp-visitor-notify') . '</h1></div>';
     }
 
     /**
@@ -426,18 +517,11 @@ class Plugin {
      * @return void
      */
     public function render_logs_page(): void {
-        echo '<div class="wrap">';
-        echo '<h1>' . \esc_html__('Logs', 'wp-visitor-notify') . '</h1>';
-        echo '<p>Logs will be added later.</p>';
-        
-        // Show a basic logger test
-        if ($this->logger) {
-            echo '<h3>Logger test:</h3>';
-            $this->logger->log('Test message from admin', 'info', ['source' => 'admin_page']);
-            echo '<p>✅ Log recorded! (check error_log or database)</p>';
+        if ($this->admin) {
+            $this->admin->render_logs();
+            return;
         }
-        
-        echo '</div>';
+        echo '<div class="wrap"><h1>' . esc_html__('Logs', 'wp-visitor-notify') . '</h1></div>';
     }
 
     /**
@@ -456,6 +540,14 @@ class Plugin {
                 return $this->database;
             case 'logger':
                 return $this->logger;
+            case 'tracker':
+                return $this->tracker;
+            case 'analytics':
+                return $this->analytics;
+            case 'detector':
+                return $this->detector;
+            case 'admin':
+                return $this->admin;
             default:
                 return null;
         }

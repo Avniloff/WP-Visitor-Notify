@@ -82,8 +82,54 @@ class Database {
      * @return bool True on success, false on failure
      */
     public function create_tables(): bool {
-        // For now, just mark as successful
-        \update_option('wpvn_db_version', self::DB_VERSION);
+        require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+
+        $charset_collate = $this->wpdb->get_charset_collate();
+
+        $tables_sql = [];
+
+        $tables_sql[] = "CREATE TABLE {$this->tables['sessions']} (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            session_key VARCHAR(64) NOT NULL,
+            ip_hash VARCHAR(64) NOT NULL,
+            user_agent TEXT NOT NULL,
+            device_type VARCHAR(20) DEFAULT '',
+            browser VARCHAR(50) DEFAULT '',
+            os VARCHAR(50) DEFAULT '',
+            created_at DATETIME NOT NULL,
+            last_activity DATETIME NOT NULL,
+            PRIMARY KEY  (id),
+            KEY session_key (session_key)
+        ) $charset_collate";
+
+        $tables_sql[] = "CREATE TABLE {$this->tables['page_views']} (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            session_id BIGINT(20) UNSIGNED NOT NULL,
+            url TEXT NOT NULL,
+            title TEXT NOT NULL,
+            viewed_at DATETIME NOT NULL,
+            PRIMARY KEY  (id),
+            KEY session_id (session_id)
+        ) $charset_collate";
+
+        $tables_sql[] = "CREATE TABLE {$this->tables['notification_rules']} (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            name VARCHAR(200) NOT NULL,
+            event_type VARCHAR(50) NOT NULL,
+            threshold INT(11) DEFAULT 0,
+            email VARCHAR(200) NOT NULL,
+            message TEXT NOT NULL,
+            status TINYINT(1) DEFAULT 1,
+            created_at DATETIME NOT NULL,
+            updated_at DATETIME NOT NULL,
+            PRIMARY KEY (id)
+        ) $charset_collate";
+
+        foreach ($tables_sql as $sql) {
+            dbDelta($sql);
+        }
+
+        update_option('wpvn_db_version', self::DB_VERSION);
         return true;
     }
 

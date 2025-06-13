@@ -61,10 +61,12 @@ spl_autoload_register(function ($class) {
         // Remove namespace and replace underscores with hyphens
         $class_name = str_replace(['WPVN\\', '_'], ['', '-'], $class);
         
-        // Form the path to the class file
+        // Form the path to the class file in includes or admin directories
         $file = WPVN_PLUGIN_DIR . 'includes/class-' . strtolower($class_name) . '.php';
-        
-        // Load the file if it exists
+        if (!file_exists($file)) {
+            $file = WPVN_PLUGIN_DIR . 'admin/class-' . strtolower($class_name) . '.php';
+        }
+
         if (file_exists($file)) {
             require_once $file;
         }
