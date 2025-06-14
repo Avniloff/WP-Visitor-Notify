@@ -55,21 +55,39 @@ if (version_compare($wp_version, '6.2', '<')) {
 }
 
 // CUSTOM AUTOLOADER
-spl_autoload_register(function ($class) {
-    // Check that the class belongs to our namespace
-    if (strpos($class, 'WPVN\\') === 0) {
-        // Remove namespace and replace underscores with hyphens
-        $class_name = str_replace(['WPVN\\', '_'], ['', '-'], $class);
-        
-        // Form the path to the class file in includes or admin directories
-        $file = WPVN_PLUGIN_DIR . 'includes/class-' . strtolower($class_name) . '.php';
-        if (!file_exists($file)) {
-            $file = WPVN_PLUGIN_DIR . 'admin/class-' . strtolower($class_name) . '.php';
-        }
+spl_autoload_register(function (string $class): void {
+    // Only handle classes from our namespace
+    if (strpos($class, 'WPVN\\') !== 0) {
+        return;
+    }
 
-        if (file_exists($file)) {
-            require_once $file;
-        }
+    // Remove the root namespace prefix
+    $relative = substr($class, strlen('WPVN\\'));
+
+    // Break into parts by namespace separators
+    $parts = explode('\\', $relative);
+
+    // Determine base directory (core includes or admin)
+    $base_dir = WPVN_PLUGIN_DIR . 'includes/';
+    if ($parts[0] === 'Admin') {
+        $base_dir = WPVN_PLUGIN_DIR . 'admin/';
+        array_shift($parts); // Remove the 'Admin' segment
+    }
+
+    // The actual class name is the last segment
+    $class_name = array_pop($parts);
+
+    // Convert remaining namespace parts to directory structure
+    $sub_path = '';
+    if (!empty($parts)) {
+        $sub_path = implode('/', $parts) . '/';
+    }
+
+    // Build the final file name
+    $file = $base_dir . $sub_path . 'class-' . strtolower(str_replace('_', '-', $class_name)) . '.php';
+
+    if (file_exists($file)) {
+        require_once $file;
     }
 });
 
