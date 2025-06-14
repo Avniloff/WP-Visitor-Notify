@@ -22,9 +22,7 @@ class Tracker {
         $this->db = $db;
         $this->detector = $detector;
         $this->logger = $logger;
-    }
-
-    /**
+    }    /**
      * Entry point for tracking a page view.
      * Runs on every front-end page load.
      */
@@ -32,8 +30,21 @@ class Tracker {
         if (is_admin() || wp_doing_ajax()) {
             return;
         }
-        $session_id = $this->get_or_create_session();
-        $this->record_page_view($session_id);
+        
+        try {
+            // Check if tables exist before tracking
+            if (!$this->db->tables_exist()) {
+                $this->logger->error('Database tables missing for tracking', [], 'tracker');
+                return;
+            }
+            
+            $session_id = $this->get_or_create_session();
+            if ($session_id > 0) {
+                $this->record_page_view($session_id);
+            }
+        } catch (\Exception $e) {
+            $this->logger->error('Tracking failed: ' . $e->getMessage(), [], 'tracker');
+        }
     }
 
     private function get_or_create_session(): int {

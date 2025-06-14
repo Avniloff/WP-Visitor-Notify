@@ -309,14 +309,13 @@ class Plugin {
         // NOTE: Lifecycle hooks are registered in main plugin file to avoid duplication
 
         // Additional frontend and cron hooks will be added in future versions
-    }
-
-    /**
+    }    /**
      * Set up front-end hooks for tracking.
      */
     private function setup_frontend_hooks(): void {
         if ($this->tracker) {
-            add_action('wp_head', [$this->tracker, 'track_visit']);
+            // Use plugins_loaded hook instead of init to set cookies before output
+            add_action('plugins_loaded', [$this->tracker, 'track_visit'], 20);
         }
     }
 
@@ -377,14 +376,13 @@ class Plugin {
             'manage_options',
             self::PLUGIN_SLUG . '-notifications',
             [$this, 'render_notifications_page']
-        );
-
-        \add_submenu_page(
+        );        \add_submenu_page(
             self::PLUGIN_SLUG,
             \__('Logs', self::PLUGIN_SLUG),
             \__('Logs', self::PLUGIN_SLUG),
             'manage_options',
-            self::PLUGIN_SLUG . '-logs',            [$this, 'render_logs_page']
+            self::PLUGIN_SLUG . '-logs',
+            [$this, 'render_logs_page']
         );
     }
 

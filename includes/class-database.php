@@ -131,18 +131,21 @@ class Database {
 
         update_option('wpvn_db_version', self::DB_VERSION);
         return true;
-    }
-
-    /**
+    }    /**
      * Check if tables exist
      *
      * @since 1.0.0
-     * @return bool True if tables exist (simplified for now)
+     * @return bool True if tables exist with correct schema
      */
     public function tables_exist(): bool {
-        // For now, assume tables exist if we have the version option
+        // First check version option for quick exit
         $version = \get_option('wpvn_db_version', '');
-        return !empty($version);
+        if (empty($version)) {
+            return false;
+        }
+        
+        // Then verify actual tables and schema
+        return $this->verify_tables_schema();
     }
 
     /**
@@ -185,6 +188,42 @@ class Database {
     public function drop_tables(): bool {
         // Remove stored database version
         \delete_option('wpvn_db_version');
+        return true;
+    }
+
+    /**
+     * Check if tables exist and have correct schema
+     *
+     * @since 1.0.0
+     * @return bool True if all tables exist with correct schema
+     */
+    public function verify_tables_schema(): bool {
+        foreach ($this->tables as $table_name) {
+            // Check if table exists
+            $table_exists = $this->wpdb->get_var(
+                $this->wpdb->prepare("SHOW TABLES LIKE %s", $table_name)
+            );
+            
+            if ($table_exists !== $table_name) {
+                return false;
+            }
+            
+            // Check specific columns for each table
+            if ($table_name === $this->tables['sessions']) {
+                $columns = $this->wpdb->get_col("DESCRIBE {$table_name}");
+                if (!in_array('session_key', $columns) || !in_array('ip_hash', $columns)) {
+                    return false;
+                }
+            }
+            
+            if ($table_name === $this->tables['page_views']) {
+                $columns = $this->wpdb->get_col("DESCRIBE {$table_name}");
+                if (!in_array('url', $columns) || !in_array('session_id', $columns)) {
+                    return false;
+                }
+            }
+        }
+        
         return true;
     }
 
