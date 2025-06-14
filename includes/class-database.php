@@ -70,9 +70,7 @@ class Database {
             'notification_history' => $wpdb->prefix . 'wpvn_notification_history',
             'logs' => $wpdb->prefix . 'wpvn_logs'
         ];
-    }
-
-    /**
+    }    /**
      * Create all plugin database tables
      *
      * Basic table creation for development.
@@ -82,7 +80,10 @@ class Database {
      * @return bool True on success, false on failure
      */
     public function create_tables(): bool {
-        require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+        // Only require upgrade.php if not in test mode
+        if (!defined('WPVN_TEST_MODE')) {
+            require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+        }
 
         $charset_collate = $this->wpdb->get_charset_collate();
 
@@ -123,10 +124,13 @@ class Database {
             created_at DATETIME NOT NULL,
             updated_at DATETIME NOT NULL,
             PRIMARY KEY (id)
-        ) $charset_collate";
-
-        foreach ($tables_sql as $sql) {
-            dbDelta($sql);
+        ) $charset_collate";        foreach ($tables_sql as $sql) {
+            if (function_exists('dbDelta')) {
+                dbDelta($sql);
+            } else {
+                // In test mode, just log the query
+                $this->wpdb->query($sql);
+            }
         }
 
         update_option('wpvn_db_version', self::DB_VERSION);

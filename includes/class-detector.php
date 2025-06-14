@@ -30,26 +30,34 @@ class Detector {
             return 'tablet';
         }
         return 'desktop';
-    }
-
-    /**
+    }    /**
      * Detect browser name from user agent.
      *
      * @param string $ua User agent string.
      * @return string Browser name.
      */
     public function get_browser(string $ua): string {
-        $browsers = ['chrome', 'safari', 'firefox', 'edge', 'opera'];
         $ua = strtolower($ua);
-        foreach ($browsers as $browser) {
-            if (strpos($ua, $browser) !== false) {
-                return $browser;
-            }
+        
+        // Check specific browsers first (order matters!)
+        if (strpos($ua, 'edg/') !== false || strpos($ua, 'edge') !== false) {
+            return 'edge';
         }
+        if (strpos($ua, 'opr/') !== false || strpos($ua, 'opera') !== false) {
+            return 'opera';
+        }
+        if (strpos($ua, 'chrome') !== false) {
+            return 'chrome';
+        }
+        if (strpos($ua, 'safari') !== false) {
+            return 'safari';
+        }
+        if (strpos($ua, 'firefox') !== false) {
+            return 'firefox';
+        }
+        
         return 'unknown';
-    }
-
-    /**
+    }    /**
      * Detect operating system from user agent.
      *
      * @param string $ua User agent string.
@@ -57,6 +65,16 @@ class Detector {
      */
     public function get_os(string $ua): string {
         $ua = strtolower($ua);
+        
+        // Check mobile OS first (they often contain desktop OS keywords)
+        if (strpos($ua, 'android') !== false) {
+            return 'android';
+        }
+        if (strpos($ua, 'ios') !== false || strpos($ua, 'iphone') !== false || strpos($ua, 'ipad') !== false) {
+            return 'ios';
+        }
+        
+        // Then check desktop OS
         if (strpos($ua, 'windows') !== false) {
             return 'windows';
         }
@@ -66,12 +84,7 @@ class Detector {
         if (strpos($ua, 'linux') !== false) {
             return 'linux';
         }
-        if (strpos($ua, 'android') !== false) {
-            return 'android';
-        }
-        if (strpos($ua, 'ios') !== false || strpos($ua, 'iphone') !== false || strpos($ua, 'ipad') !== false) {
-            return 'ios';
-        }
+        
         return 'unknown';
     }
 }

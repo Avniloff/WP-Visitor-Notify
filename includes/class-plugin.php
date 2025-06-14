@@ -426,4 +426,36 @@ class Plugin {    /**
     public function __wakeup() {
         throw new \Exception('Cannot unserialize singleton');
     }
+
+    /**
+     * Initialize the plugin with injected dependencies (for testing only)
+     *
+     * This method allows dependency injection for testing purposes.
+     * It bypasses the normal initialization flow and directly sets
+     * the provided dependencies.
+     *
+     * @since 1.0.0
+     * @param Database $database Database instance
+     * @param Detector $detector Device/browser detector
+     * @param Logger $logger Logging system
+     * @param Tracker $tracker Visit tracking system
+     * @return void
+     */
+    public function init_with_dependencies(
+        Database $database,
+        Detector $detector,
+        Logger $logger,
+        Tracker $tracker
+    ): void {
+        if ($this->is_initialized) {
+            return;
+        }        $this->database = $database;
+        $this->detector = $detector;
+        $this->logger = $logger;
+        $this->tracker = $tracker;
+        $this->analytics = new Analytics($this->database);
+        $this->admin = new AdminInterface($this, $this->analytics);
+
+        $this->is_initialized = true;
+    }
 }

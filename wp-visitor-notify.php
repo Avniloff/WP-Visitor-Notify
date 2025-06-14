@@ -26,11 +26,21 @@ if (!defined('ABSPATH')) {
 }
 
 // Plugin constants
-define('WPVN_VERSION', '1.0.0');
-define('WPVN_PLUGIN_FILE', __FILE__);
-define('WPVN_PLUGIN_DIR', plugin_dir_path(__FILE__));
-define('WPVN_PLUGIN_URL', plugin_dir_url(__FILE__));
-define('WPVN_PLUGIN_BASENAME', plugin_basename(__FILE__));
+if (!defined('WPVN_VERSION')) {
+    define('WPVN_VERSION', '1.0.0');
+}
+if (!defined('WPVN_PLUGIN_FILE')) {
+    define('WPVN_PLUGIN_FILE', __FILE__);
+}
+if (!defined('WPVN_PLUGIN_DIR')) {
+    define('WPVN_PLUGIN_DIR', plugin_dir_path(__FILE__));
+}
+if (!defined('WPVN_PLUGIN_URL')) {
+    define('WPVN_PLUGIN_URL', plugin_dir_url(__FILE__));
+}
+if (!defined('WPVN_PLUGIN_BASENAME')) {
+    define('WPVN_PLUGIN_BASENAME', plugin_basename(__FILE__));
+}
 
 // Check PHP version - if less than 8.2, show error and stop loading
 if (version_compare(PHP_VERSION, '8.2', '<')) {

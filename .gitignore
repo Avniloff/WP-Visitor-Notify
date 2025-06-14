@@ -16,6 +16,7 @@ error_log
 error.log
 
 # Development Files
+ARCHITECTURE.md
 development.md
 README-dev.md
 CHANGELOG.md
@@ -124,3 +125,19 @@ xdebug.ini.local
 # Apache Config (local dev)
 .htaccess.local
 apache-config.local.conf
+
+# Testing Files and Documentation
+tests/
+TEST_ERRORS.md
+phpunit.xml
+.phpunit.result.cache
+
+# Development Documentation
+ARCHITECTURE.md
+development.md
+
+# Docker Development Files
+docker-compose.yml
+Dockerfile
+xdebug.ini
+apache-config.conf
