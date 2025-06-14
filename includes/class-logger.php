@@ -172,4 +172,27 @@ class Logger {
         
         return $formatted;
     }
+
+    /**
+     * Get the preferred log file path
+     *
+     * @return string|null Path to log file or null if none available
+     */
+    public function get_log_file(): ?string {
+        $log_sources = [
+            WP_CONTENT_DIR . '/debug.log',
+            ABSPATH . 'wp-content/debug.log',
+            ini_get('error_log'),
+            ABSPATH . 'error_log',
+            ABSPATH . 'error.log'
+        ];
+        
+        foreach ($log_sources as $source) {
+            if ($source && is_readable($source) && is_file($source)) {
+                return $source;
+            }
+        }
+        
+        return null;
+    }
 }

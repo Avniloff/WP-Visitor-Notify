@@ -29,12 +29,6 @@ if (!defined('ABSPATH')) {
 class Uninstaller {
 
     /**
-     * Plugin slug for options cleanup
-     *
-     * @since 1.0.0
-     * @var string
-     */
-    private const PLUGIN_SLUG = 'wp-visitor-notify';    /**
      * Main uninstall method
      *
      * Called by WordPress when plugin is completely uninstalled.
@@ -83,10 +77,9 @@ class Uninstaller {
      *
      * @since 1.0.0
      * @return void
-     */    private static function remove_plugin_options(): void {
-        $options_to_remove = [
-            self::PLUGIN_SLUG . '_options',
-            self::PLUGIN_SLUG . '_settings',
+     */    private static function remove_plugin_options(): void {        $options_to_remove = [
+            Plugin::PLUGIN_SLUG . '_options',
+            Plugin::PLUGIN_SLUG . '_settings',
             'wpvn_db_version',
         ];
 

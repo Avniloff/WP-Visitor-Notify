@@ -78,4 +78,106 @@ class Analytics {
         );
         return $this->db->get_wpdb()->get_results($sql, ARRAY_A) ?: [];
     }
+
+    /**
+     * Get device type statistics
+     *
+     * @param int $days Number of days to analyze
+     * @return array<string, int> Device types and their visit counts
+     */
+    public function get_device_stats(int $days = 7): array {
+        $sessions_table = $this->db->get_tables()['sessions'];
+        $sql = $this->db->get_wpdb()->prepare(
+            "SELECT device_type, COUNT(DISTINCT id) as count 
+             FROM {$sessions_table} 
+             WHERE created_at >= DATE_SUB(UTC_TIMESTAMP(), INTERVAL %d DAY) 
+             GROUP BY device_type 
+             ORDER BY count DESC",
+            $days
+        );
+        return $this->db->get_wpdb()->get_results($sql, ARRAY_A) ?: [];
+    }
+
+    /**
+     * Get browser statistics
+     *
+     * @param int $days Number of days to analyze
+     * @return array<string, int> Browsers and their visit counts
+     */
+    public function get_browser_stats(int $days = 7): array {
+        $sessions_table = $this->db->get_tables()['sessions'];
+        $sql = $this->db->get_wpdb()->prepare(
+            "SELECT browser, COUNT(DISTINCT id) as count 
+             FROM {$sessions_table} 
+             WHERE created_at >= DATE_SUB(UTC_TIMESTAMP(), INTERVAL %d DAY) 
+             GROUP BY browser 
+             ORDER BY count DESC",
+            $days
+        );
+        return $this->db->get_wpdb()->get_results($sql, ARRAY_A) ?: [];
+    }
+
+    /**
+     * Get operating system statistics
+     *
+     * @param int $days Number of days to analyze
+     * @return array<string, int> Operating systems and their visit counts
+     */
+    public function get_os_stats(int $days = 7): array {
+        $sessions_table = $this->db->get_tables()['sessions'];
+        $sql = $this->db->get_wpdb()->prepare(
+            "SELECT os, COUNT(DISTINCT id) as count 
+             FROM {$sessions_table} 
+             WHERE created_at >= DATE_SUB(UTC_TIMESTAMP(), INTERVAL %d DAY) 
+             GROUP BY os 
+             ORDER BY count DESC",
+            $days
+        );
+        return $this->db->get_wpdb()->get_results($sql, ARRAY_A) ?: [];
+    }
+
+    /**
+     * Get hourly visit distribution
+     *
+     * @param int $days Number of days to analyze
+     * @return array<int, int> Hours (0-23) and their visit counts
+     */
+    public function get_hourly_stats(int $days = 7): array {
+        $views_table = $this->db->get_tables()['page_views'];
+        $sql = $this->db->get_wpdb()->prepare(
+            "SELECT HOUR(viewed_at) as hour, COUNT(*) as count 
+             FROM {$views_table} 
+             WHERE viewed_at >= DATE_SUB(UTC_TIMESTAMP(), INTERVAL %d DAY) 
+             GROUP BY HOUR(viewed_at) 
+             ORDER BY hour",
+            $days
+        );
+        return $this->db->get_wpdb()->get_results($sql, ARRAY_A) ?: [];
+    }
+
+    /**
+     * Get recent visitors
+     *
+     * @param int $limit Number of recent visitors to return
+     * @return array Recent visitor sessions with their details
+     */
+    public function get_recent_visitors(int $limit = 10): array {
+        $sessions_table = $this->db->get_tables()['sessions'];
+        $views_table = $this->db->get_tables()['page_views'];
+        
+        $sql = $this->db->get_wpdb()->prepare(
+            "SELECT s.*, v.url as last_url, v.title as last_page_title
+             FROM {$sessions_table} s
+             LEFT JOIN {$views_table} v ON v.session_id = s.id
+             WHERE v.id IN (
+                SELECT MAX(id) 
+                FROM {$views_table} 
+                GROUP BY session_id
+             )
+             ORDER BY s.last_activity DESC
+             LIMIT %d",
+            $limit
+        );
+        return $this->db->get_wpdb()->get_results($sql, ARRAY_A) ?: [];
+    }
 }

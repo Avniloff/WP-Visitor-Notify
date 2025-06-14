@@ -17,24 +17,24 @@ if (!defined('ABSPATH')) {
  * @since 1.0.0
  */
 class Admin {
-    private Plugin $plugin;
-    private Analytics $analytics;
-
-    public function __construct(Plugin $plugin, Analytics $analytics) {
-        $this->plugin = $plugin;
-        $this->analytics = $analytics;
+    private Settings $settings;
+    private Dashboard $dashboard;
+    private Logs $logs;    public function __construct(Plugin $plugin, Analytics $analytics) {
+        $this->settings = new Settings();
+        $this->dashboard = new Dashboard($analytics);
+        $this->logs = new Logs($plugin->get_logger());
     }
 
     public function init(): void {
         \add_action('admin_menu', [$this, 'register_menu']);
         \add_action('admin_enqueue_scripts', [$this, 'enqueue_assets']);
-        \add_action('admin_init', [$this, 'register_settings']);
-    }
-
-    public function register_menu(): void {
+        
+        // Initialize settings
+        $this->settings->init();
+    }    public function register_menu(): void {
         \add_menu_page(
-            __('Visitor Analytics', 'wp-visitor-notify'),
-            __('Visitor Analytics', 'wp-visitor-notify'),
+            __('Dashboard', 'wp-visitor-notify'),
+            __('Visitor Notify', 'wp-visitor-notify'),
             'manage_options',
             Plugin::PLUGIN_SLUG,
             [$this, 'render_dashboard'],
@@ -48,32 +48,32 @@ class Admin {
             'manage_options',
             Plugin::PLUGIN_SLUG . '-settings',
             [$this, 'render_settings']
+        );        \add_submenu_page(
+            Plugin::PLUGIN_SLUG,
+            __('Logs', 'wp-visitor-notify'),
+            __('Logs', 'wp-visitor-notify'),
+            'manage_options',
+            Plugin::PLUGIN_SLUG . '-logs',
+            [$this, 'render_logs']
         );
-    }
-
-    public function enqueue_assets(string $hook): void {
-        \wp_enqueue_style('wpvn-admin', WPVN_PLUGIN_URL . 'admin/assets/css/admin.css', [], Plugin::VERSION);
-        \wp_enqueue_script('wpvn-admin', WPVN_PLUGIN_URL . 'admin/assets/js/admin.js', ['jquery'], Plugin::VERSION, true);
-    }
-
-    public function register_settings(): void {
-        \register_setting('wpvn_settings_group', 'wpvn_settings');
-    }
-
-    public function render_dashboard(): void {
-        $data = $this->analytics->get_daily_visits(7);
-        include WPVN_PLUGIN_DIR . 'admin/templates/dashboard.php';
-    }
-
-    public function render_settings(): void {
-        include WPVN_PLUGIN_DIR . 'admin/templates/settings.php';
+    }    public function enqueue_assets(string $hook): void {
+        \wp_enqueue_style('wpvn-admin', WPVN_PLUGIN_URL . 'admin/assets/css/admin.css', [], WPVN_VERSION);
+        \wp_enqueue_script('wpvn-admin', WPVN_PLUGIN_URL . 'admin/assets/js/admin.js', ['jquery'], WPVN_VERSION, true);
+    }public function render_dashboard(): void {
+        $this->dashboard->render();
+    }public function render_settings(): void {
+        $this->settings->render();
     }
 
     public function render_notifications(): void {
         echo '<div class="wrap"><h1>' . esc_html__('Notifications', 'wp-visitor-notify') . '</h1></div>';
-    }
-
-    public function render_logs(): void {
-        echo '<div class="wrap"><h1>' . esc_html__('Logs', 'wp-visitor-notify') . '</h1></div>';
+    }    public function render_logs(): void {
+        // Handle export action
+        if (isset($_GET['action']) && $_GET['action'] === 'export') {
+            $this->logs->export_logs();
+            return;
+        }
+        
+        $this->logs->render();
     }
 }

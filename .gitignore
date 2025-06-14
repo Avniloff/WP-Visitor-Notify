@@ -1,0 +1,126 @@
+# WordPress Core Files
+wp-config.php
+wp-content/uploads/
+wp-content/blogs.dir/
+wp-content/upgrade/
+wp-content/backup-db/
+wp-content/advanced-cache.php
+wp-content/wp-cache-config.php
+wp-content/cache/
+wp-content/cache/supercache/
+
+# WordPress Debug Logs
+debug.log
+wp-content/debug.log
+error_log
+error.log
+
+# Development Files
+development.md
+README-dev.md
+CHANGELOG.md
+TODO.md
+NOTES.md
+
+# IDE/Editor Files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.atom/
+.brackets.json
+
+# OS Generated Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# Logs
+*.log
+logs/
+*.log.*
+
+# Runtime Data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Dependency Directories
+node_modules/
+bower_components/
+vendor/
+
+# Build Directories
+dist/
+build/
+.tmp/
+.sass-cache/
+
+# Environment Files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Package Manager Files
+package-lock.json
+yarn.lock
+composer.lock
+
+# Backup Files
+*.bak
+*.backup
+*.old
+*.orig
+*.save
+*.swp
+*.tmp
+
+# Docker Files (if not needed in repo)
+docker-compose.override.yml
+.docker/
+
+# Testing
+coverage/
+.nyc_output/
+.phpunit.result.cache
+
+# Archives
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# Cache Files
+.cache/
+*.cache
+
+# Temporary Files
+temp/
+tmp/
+.temp/
+.tmp/
+
+# WordPress Specific
+wp-content/mu-plugins/
+wp-content/object-cache.php
+sitemap.xml
+sitemap.xml.gz
+
+# Plugin Development
+*.pot~
+languages/*.mo
+
+# Xdebug
+xdebug.ini.local
+
+# Apache Config (local dev)
+.htaccess.local
+apache-config.local.conf

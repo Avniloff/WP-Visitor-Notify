@@ -31,20 +31,7 @@ use WPVN\Admin\Admin as AdminInterface;
  *
  * @since 1.0.0
  */
-class Plugin {
-
-    /**
-     * Plugin version
-     * 
-     * This version is used for cache busting, database migrations,
-     * and ensuring compatibility across plugin updates.
-     *
-     * @since 1.0.0
-     * @var string
-     */
-    public const VERSION = '1.0.0';
-
-    /**
+class Plugin {    /**
      * Plugin slug for WordPress hooks and options
      *
      * Used as prefix for WordPress hooks, option names,
@@ -186,7 +173,7 @@ class Plugin {
 
             // Log successful initialization
             $this->logger->log('Plugin initialized successfully', 'info', [
-                'version' => self::VERSION,
+                'version' => WPVN_VERSION,
                 'php_version' => \PHP_VERSION,
                 'components_loaded' => ['logger', 'database', 'detector', 'tracker', 'analytics', 'admin']
             ]);
@@ -291,25 +278,11 @@ class Plugin {
      *
      * @since 1.0.0
      * @return void
-     */
-    private function setup_basic_hooks(): void {
-        // Only basic hooks for testing for now
-          // Admin-only hooks
-        if (\is_admin()) {
-            // When the Admin class is instantiated it already hooks into these
-            // actions via Admin::init(). Register them here only when the
-            // Admin component is absent to avoid duplicate callbacks.
-            if (null === $this->admin) {
-                \add_action('admin_menu', [$this, 'setup_admin_menu']);
-                \add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_assets']);
-                \add_action('admin_init', [$this, 'register_settings']);
-            }
-        }
-
+     */    private function setup_basic_hooks(): void {
         // NOTE: Lifecycle hooks are registered in main plugin file to avoid duplication
 
         // Additional frontend and cron hooks will be added in future versions
-    }    /**
+    }/**
      * Set up front-end hooks for tracking.
      */
     private function setup_frontend_hooks(): void {
@@ -327,95 +300,7 @@ class Plugin {
      */
     private function load_textdomain(): void {
         load_plugin_textdomain(self::PLUGIN_SLUG, false, dirname(WPVN_PLUGIN_BASENAME) . '/languages');
-    }
-
-    /**
-     * Set up admin menu pages
-     *
-     * Creates the admin menu structure for the plugin.
-     * This includes the main dashboard and sub-pages.
-     *
-     * @since 1.0.0
-     * @return void
-     */
-    public function setup_admin_menu(): void {
-        if ($this->admin) {
-            $this->admin->register_menu();
-            return;
-        }
-        // Check user capabilities
-        if (!\current_user_can('manage_options')) {
-            return;
-        }
-
-        // Main menu page
-        \add_menu_page(
-            \__('Visitor Analytics', self::PLUGIN_SLUG),     // Page title
-            \__('Visitor Analytics', self::PLUGIN_SLUG),     // Menu title
-            'manage_options',                                  // Capability
-            self::PLUGIN_SLUG,                                // Menu slug
-            [$this, 'render_dashboard_page'],                 // Callback
-            'dashicons-visibility',                           // Icon
-            30                                                // Position
-        );
-
-        // Submenu pages
-        \add_submenu_page(
-            self::PLUGIN_SLUG,
-            \__('Settings', self::PLUGIN_SLUG),
-            \__('Settings', self::PLUGIN_SLUG),
-            'manage_options',
-            self::PLUGIN_SLUG . '-settings',
-            [$this, 'render_settings_page']
-        );
-
-        \add_submenu_page(
-            self::PLUGIN_SLUG,
-            \__('Notifications', self::PLUGIN_SLUG),
-            \__('Notifications', self::PLUGIN_SLUG),
-            'manage_options',
-            self::PLUGIN_SLUG . '-notifications',
-            [$this, 'render_notifications_page']
-        );        \add_submenu_page(
-            self::PLUGIN_SLUG,
-            \__('Logs', self::PLUGIN_SLUG),
-            \__('Logs', self::PLUGIN_SLUG),
-            'manage_options',
-            self::PLUGIN_SLUG . '-logs',
-            [$this, 'render_logs_page']
-        );
-    }
-
-    /**
-     * Enqueue admin assets (CSS and JavaScript)
-     *
-     * @since 1.0.0
-     * @param string $hook The current admin page hook
-     * @return void
-     */
-    public function enqueue_admin_assets(string $hook): void {
-        if ($this->admin) {
-            $this->admin->enqueue_assets($hook);
-            return;
-        }
-    }
-
-    /**
-     * Register plugin settings
-     *
-     * @since 1.0.0
-     * @return void
-     */
-    public function register_settings(): void {
-        if ($this->admin) {
-            $this->admin->register_settings();
-            return;
-        }
-    }
-
-    /* Placeholder settings helpers removed */
-
-    /**
+    }    /**
      * Plugin activation handler
      *
      * Called when the plugin is activated. Simplified version for learning.
@@ -432,13 +317,13 @@ class Plugin {
 
             // Create default options (simple basic settings)
             $default_options = [
-                'plugin_version' => self::VERSION,
+                'plugin_version' => WPVN_VERSION,
                 'activation_time' => \current_time('mysql', true)
             ];
             \add_option(self::PLUGIN_SLUG . '_options', $default_options);
 
             // Log successful activation (use error_log during activation as logger may not be initialized)
-            \error_log('[' . \date('Y-m-d H:i:s') . '] WPVN.INFO: Plugin activated successfully | Context: {"version":"' . self::VERSION . '","options_created":true}');
+            \error_log('[' . \date('Y-m-d H:i:s') . '] WPVN.INFO: Plugin activated successfully | Context: {"version":"' . WPVN_VERSION . '","options_created":true}');
         } catch (\Exception $e) {
             \error_log('WPVN Plugin activation failed: ' . $e->getMessage());
             \wp_die('Plugin activation failed: ' . $e->getMessage());
@@ -461,69 +346,7 @@ class Plugin {
         // Cron cleanup will be added when scheduled tasks are implemented
     }
 
-    /* Placeholder cron scheduling method removed */
-
-    /**
-     * Render dashboard admin page
-     * Simple placeholder for testing
-     *
-     * @since 1.0.0
-     * @return void
-     */
-    public function render_dashboard_page(): void {
-        if ($this->admin) {
-            $this->admin->render_dashboard();
-            return;
-        }
-        echo '<div class="wrap"><h1>' . esc_html__('WP Visitor Notify Dashboard', 'wp-visitor-notify') . '</h1></div>';
-    }
-
-    /**
-     * Render settings admin page
-     * Simple placeholder for testing
-     *
-     * @since 1.0.0
-     * @return void
-     */
-    public function render_settings_page(): void {
-        if ($this->admin) {
-            $this->admin->render_settings();
-            return;
-        }
-        echo '<div class="wrap"><h1>' . esc_html__('Settings', 'wp-visitor-notify') . '</h1></div>';
-    }
-
-    /**
-     * Render notifications admin page
-     * Simple placeholder for testing
-     *
-     * @since 1.0.0
-     * @return void
-     */
-    public function render_notifications_page(): void {
-        if ($this->admin) {
-            $this->admin->render_notifications();
-            return;
-        }
-        echo '<div class="wrap"><h1>' . esc_html__('Notifications', 'wp-visitor-notify') . '</h1></div>';
-    }
-
-    /**
-     * Render logs admin page
-     * Simple placeholder for testing
-     *
-     * @since 1.0.0
-     * @return void
-     */
-    public function render_logs_page(): void {
-        if ($this->admin) {
-            $this->admin->render_logs();
-            return;
-        }
-        echo '<div class="wrap"><h1>' . esc_html__('Logs', 'wp-visitor-notify') . '</h1></div>';
-    }
-
-    /**
+    /* Placeholder cron scheduling method removed */    /**
      * Get component instance by name
      *
      * Provides access to initialized components for other classes.
@@ -553,13 +376,26 @@ class Plugin {
     }
 
     /**
+     * Get the logger instance
+     *
+     * @since 1.0.0
+     * @return Logger The logger instance
+     */
+    public function get_logger(): Logger {
+        if (null === $this->logger) {
+            $this->init_logger();
+        }
+        return $this->logger;
+    }
+
+    /**
      * Get plugin version
      *
      * @since 1.0.0
      * @return string Plugin version
      */
     public function get_version(): string {
-        return self::VERSION;
+        return WPVN_VERSION;
     }
 
     /**
