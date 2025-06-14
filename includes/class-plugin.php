@@ -294,15 +294,16 @@ class Plugin {
      */
     private function setup_basic_hooks(): void {
         // Only basic hooks for testing for now
-        
-        // Admin-only hooks
+          // Admin-only hooks
         if (\is_admin()) {
-            // Initialize admin interface
-            \add_action('admin_menu', [$this, 'setup_admin_menu']);
-            \add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_assets']);
-            
-            // Settings API hooks
-            \add_action('admin_init', [$this, 'register_settings']);
+            // When the Admin class is instantiated it already hooks into these
+            // actions via Admin::init(). Register them here only when the
+            // Admin component is absent to avoid duplicate callbacks.
+            if (null === $this->admin) {
+                \add_action('admin_menu', [$this, 'setup_admin_menu']);
+                \add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_assets']);
+                \add_action('admin_init', [$this, 'register_settings']);
+            }
         }
 
         // NOTE: Lifecycle hooks are registered in main plugin file to avoid duplication

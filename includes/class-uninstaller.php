@@ -83,14 +83,11 @@ class Uninstaller {
      *
      * @since 1.0.0
      * @return void
-     */
-    private static function remove_plugin_options(): void {
+     */    private static function remove_plugin_options(): void {
         $options_to_remove = [
             self::PLUGIN_SLUG . '_options',
             self::PLUGIN_SLUG . '_settings',
             'wpvn_db_version',
-            'wpvn_activation_time',
-            'wpvn_plugin_version',
         ];
 
         foreach ($options_to_remove as $option) {
