@@ -1,0 +1,304 @@
+/**
+ * Settings page styles for WP Visitor Notify
+ * Contains styles for forms, sections, and configuration options
+ */
+
+/* Settings form layout */
+.wpvn-settings-form {
+    background: #fff;
+    border: 1px solid #e1e1e1;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+/* Settings sections */
+.wpvn-settings-section {
+    border-bottom: 1px solid #e1e1e1;
+    padding: 32px;
+}
+
+.wpvn-settings-section:last-child {
+    border-bottom: none;
+}
+
+.wpvn-settings-section h3 {
+    color: #23282d;
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 24px 0;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #2271b1;
+}
+
+.wpvn-settings-section .description {
+    color: #646970;
+    font-size: 14px;
+    margin-bottom: 24px;
+    line-height: 1.6;
+}
+
+/* Form fields */
+.wpvn-form-group {
+    margin-bottom: 24px;
+}
+
+.wpvn-form-group:last-child {
+    margin-bottom: 0;
+}
+
+.wpvn-form-group label {
+    display: block;
+    font-weight: 600;
+    color: #23282d;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.wpvn-form-group input[type="text"],
+.wpvn-form-group input[type="number"],
+.wpvn-form-group input[type="email"],
+.wpvn-form-group select,
+.wpvn-form-group textarea {
+    width: 100%;
+    max-width: 400px;
+    padding: 12px;
+    border: 1px solid #ddd;    border-radius: 4px;
+    font-size: 14px;
+    background: #fff;
+}
+
+.wpvn-form-group input[type="text"]:focus,
+.wpvn-form-group input[type="number"]:focus,
+.wpvn-form-group input[type="email"]:focus,
+.wpvn-form-group select:focus,
+.wpvn-form-group textarea:focus {
+    outline: none;
+    border-color: #2271b1;
+    box-shadow: 0 0 0 2px rgba(34, 113, 177, 0.1);
+}
+
+.wpvn-form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* Checkbox and radio styling */
+.wpvn-checkbox-group,
+.wpvn-radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.wpvn-checkbox-item,
+.wpvn-radio-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.wpvn-checkbox-item input[type="checkbox"],
+.wpvn-radio-item input[type="radio"] {
+    margin: 0;
+    width: auto;
+}
+
+.wpvn-checkbox-item label,
+.wpvn-radio-item label {
+    margin: 0;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+/* Field descriptions */
+.wpvn-field-description {
+    color: #646970;
+    font-size: 13px;
+    margin-top: 4px;
+    line-height: 1.4;
+}
+
+/* Notification-specific styles */
+.wpvn-notification-warning {
+    color: #dc3232;
+    font-weight: 600;
+    margin-top: 8px;
+    padding: 8px 12px;
+    background: #fef7f7;
+    border: 1px solid #dc3232;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.wpvn-notification-info {
+    color: #2271b1;
+    font-style: italic;
+    margin-top: 4px;
+    font-size: 13px;
+}
+
+.wpvn-checkbox-item input[type="checkbox"] + label {
+    margin-left: 4px;
+    font-weight: 500;
+}
+
+.wpvn-threshold-dependent {
+    margin-left: 24px;
+    padding-left: 16px;
+    border-left: 3px solid #e1e1e1;
+}
+
+/* Action buttons */
+.wpvn-actions {
+    background: #f6f7f7;
+    border-top: 1px solid #e1e1e1;
+    padding: 24px 32px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.wpvn-btn {
+    display: inline-block;
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    min-height: 44px;
+    line-height: 1.2;
+}
+
+.wpvn-btn-primary {
+    background: #2271b1;
+    color: #fff;
+}
+
+.wpvn-btn-secondary {
+    background: #f6f7f7;
+    color: #50575e;
+    border: 1px solid #c3c4c7;
+}
+
+.wpvn-btn-danger {
+    background: #dc3232;
+    color: #fff;
+}
+
+.wpvn-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Status indicators */
+.wpvn-status-enabled {
+    color: #00a32a;
+    font-weight: 600;
+}
+
+.wpvn-status-disabled {
+    color: #dc3232;
+    font-weight: 600;
+}
+
+/* Toggle switch */
+.wpvn-toggle {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.wpvn-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.wpvn-toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    border-radius: 24px;
+}
+
+.wpvn-toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    border-radius: 50%;
+}
+
+.wpvn-toggle input:checked + .wpvn-toggle-slider {
+    background-color: #2271b1;
+}
+
+.wpvn-toggle input:checked + .wpvn-toggle-slider:before {
+    transform: translateX(26px);
+}
+
+/* Advanced settings section */
+.wpvn-advanced-settings {
+    border: 1px solid #e1e1e1;
+    border-radius: 4px;
+    margin-top: 24px;
+    overflow: hidden;
+}
+
+.wpvn-advanced-header {
+    background: #f6f7f7;
+    padding: 16px 24px;
+    border-bottom: 1px solid #e1e1e1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: between;
+}
+
+.wpvn-advanced-header h4 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.wpvn-advanced-content {
+    padding: 24px;
+    display: none;
+}
+
+.wpvn-advanced-content.open {
+    display: block;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .wpvn-settings-section {
+        padding: 24px 16px;
+    }
+    
+    .wpvn-actions {
+        padding: 16px;
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .wpvn-btn {
+        text-align: center;
+    }
+    
+    .wpvn-form-group input[type="text"],
+    .wpvn-form-group input[type="number"],
+    .wpvn-form-group input[type="email"],
+    .wpvn-form-group select,
+    .wpvn-form-group textarea {
+        max-width: 100%;
+    }
+}

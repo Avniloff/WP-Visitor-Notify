@@ -111,9 +111,7 @@ class Database {
             viewed_at DATETIME NOT NULL,
             PRIMARY KEY  (id),
             KEY session_id (session_id)
-        ) $charset_collate";
-
-        $tables_sql[] = "CREATE TABLE {$this->tables['notification_rules']} (
+        ) $charset_collate";        $tables_sql[] = "CREATE TABLE {$this->tables['notification_rules']} (
             id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
             name VARCHAR(200) NOT NULL,
             event_type VARCHAR(50) NOT NULL,
@@ -124,7 +122,22 @@ class Database {
             created_at DATETIME NOT NULL,
             updated_at DATETIME NOT NULL,
             PRIMARY KEY (id)
-        ) $charset_collate";        foreach ($tables_sql as $sql) {
+        ) $charset_collate";
+
+        $tables_sql[] = "CREATE TABLE {$this->tables['notification_history']} (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            rule_id BIGINT(20) UNSIGNED NOT NULL,
+            email VARCHAR(200) NOT NULL,
+            event_type VARCHAR(50) NOT NULL,
+            visitor_data TEXT NOT NULL,
+            sent_at DATETIME NOT NULL,
+            status VARCHAR(20) DEFAULT 'sent',
+            PRIMARY KEY (id),
+            KEY rule_id (rule_id),
+            KEY sent_at (sent_at)
+        ) $charset_collate";
+
+        foreach ($tables_sql as $sql) {
             if (function_exists('dbDelta')) {
                 dbDelta($sql);
             } else {

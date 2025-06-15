@@ -1,0 +1,311 @@
+/* Container and Layout */
+.wpvn-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px;
+}
+
+/* Typography */
+.wpvn-container {
+    font-size: 17px;
+    line-height: 1.5;
+}
+
+.wpvn-container h1, .wpvn-container h2, .wpvn-container h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.wpvn-container .small-text {
+    font-size: 13px;
+}
+
+/* Common spacing system (8px) */
+.wpvn-spacing-xs { padding: 8px; }
+.wpvn-spacing-sm { padding: 16px; }
+.wpvn-spacing-md { padding: 24px; }
+.wpvn-spacing-lg { padding: 32px; }
+
+/* Common border radius */
+.wpvn-rounded {
+    border-radius: 4px;
+}
+
+/* Header styles */
+.wpvn-header {
+    background: #fff;
+    border: 1px solid #e1e1e1;
+    border-radius: 4px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.wpvn-header h1 {
+    margin: 0;
+    color: #23282d;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.wpvn-header .version {
+    background: #f6f7f7;
+    color: #646970;
+    padding: 4px 8px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 500;
+    margin-left: 12px;
+}
+
+.wpvn-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.wpvn-status-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.wpvn-status-indicator.active {
+    background: #00a32a;
+    box-shadow: 0 0 0 2px rgba(0, 163, 42, 0.2);
+}
+
+.wpvn-status-indicator.inactive {
+    background: #dc3232;
+    box-shadow: 0 0 0 2px rgba(220, 50, 50, 0.2);
+}
+
+/* Buttons */
+.wpvn-btn {
+    display: inline-block;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;    cursor: pointer;
+    line-height: 1.4;
+    text-align: center;
+}
+
+.wpvn-btn:focus {
+    outline: 2px solid #2271b1;
+    outline-offset: 2px;
+}
+
+.wpvn-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Button variants */
+.wpvn-btn-primary {
+    background: #2271b1;
+    color: #fff;
+}
+
+.wpvn-btn-secondary {
+    background: #f6f7f7;
+    color: #50575e;
+    border: 1px solid #c3c4c7;
+}
+
+.wpvn-btn-secondary {
+    background: #f0f0f1;
+    color: #50575e;
+}
+
+.wpvn-btn-danger {
+    background: #dc3232;
+    color: #fff;
+}
+
+/* Loading states */
+.wpvn-loading {
+    position: relative;
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.wpvn-loading::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;    border: 2px solid #e1e1e1;
+    border-top: 2px solid #2271b1;
+    border-radius: 50%;
+    z-index: 10;
+}
+
+
+
+/* Message styles */
+.wpvn-message {
+    padding: 12px 16px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.wpvn-success {
+    background: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+}
+
+.wpvn-error {
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+}
+
+.wpvn-warning {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    color: #856404;
+}
+
+.wpvn-info {
+    background: #d1ecf1;
+    border: 1px solid #bee5eb;
+    color: #0c5460;
+}
+
+/* Tables */
+.wpvn-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border: 1px solid #e1e1e1;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.wpvn-table th,
+.wpvn-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e1e1e1;
+}
+
+.wpvn-table th {
+    background: #f6f7f7;
+    font-weight: 600;
+    color: #23282d;
+    font-size: 14px;
+}
+
+.wpvn-table td {
+    color: #50575e;
+    font-size: 14px;
+}
+
+.wpvn-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Form elements */
+.wpvn-form-group {
+    margin-bottom: 16px;
+}
+
+.wpvn-form-group label {
+    display: block;
+    font-weight: 500;
+    color: #23282d;
+    margin-bottom: 4px;
+    font-size: 14px;
+}
+
+.wpvn-form-group input,
+.wpvn-form-group textarea,
+.wpvn-form-group select {
+    width: 100%;
+    padding: 8px 12px;    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    background: #fff;
+}
+
+.wpvn-form-group input:focus,
+.wpvn-form-group textarea:focus,
+.wpvn-form-group select:focus {
+    outline: none;
+    border-color: #2271b1;
+    box-shadow: 0 0 0 2px rgba(34, 113, 177, 0.1);
+}
+
+.wpvn-form-group input.error,
+.wpvn-form-group textarea.error,
+.wpvn-form-group select.error {
+    border-color: #dc3232;
+}
+
+.field-error {
+    color: #dc3232;
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+/* Utility classes */
+.wpvn-text-center { text-align: center; }
+.wpvn-text-left { text-align: left; }
+.wpvn-text-right { text-align: right; }
+
+.wpvn-mb-0 { margin-bottom: 0; }
+.wpvn-mb-1 { margin-bottom: 8px; }
+.wpvn-mb-2 { margin-bottom: 16px; }
+.wpvn-mb-3 { margin-bottom: 24px; }
+
+.wpvn-mt-0 { margin-top: 0; }
+.wpvn-mt-1 { margin-top: 8px; }
+.wpvn-mt-2 { margin-top: 16px; }
+.wpvn-mt-3 { margin-top: 24px; }
+
+.wpvn-hidden { display: none; }
+.wpvn-show { display: block; }
+
+/* Responsive utilities */
+@media (max-width: 768px) {
+    .wpvn-container {
+        padding: 16px;
+    }
+    
+    .wpvn-header {
+        padding: 16px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .wpvn-header h1 {
+        font-size: 20px;
+    }
+    
+    .wpvn-table th,
+    .wpvn-table td {
+        padding: 8px;
+        font-size: 13px;
+    }
+    
+    .wpvn-btn {
+        width: 100%;
+        margin-bottom: 8px;
+    }
+}

@@ -1,0 +1,366 @@
+/**
+ * Logs page styles for WP Visitor Notify
+ * Contains styles for filters, tables, modals, and log entries
+ */
+
+/* Logs header with filters */
+.wpvn-logs-header {
+    background: #fff;
+    border: 1px solid #e1e1e1;
+    border-radius: 4px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.wpvn-logs-header h3 {
+    margin: 0 0 24px 0;
+    color: #23282d;
+}
+
+/* Filter controls */
+.wpvn-filters {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.wpvn-filter-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.wpvn-filter-group label {
+    font-weight: 600;
+    color: #23282d;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.wpvn-filter-group input,
+.wpvn-filter-group select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    background: #fff;
+}
+
+.wpvn-filter-group input:focus,
+.wpvn-filter-group select:focus {
+    outline: none;
+    border-color: #2271b1;
+    box-shadow: 0 0 0 2px rgba(34, 113, 177, 0.1);
+}
+
+/* Filter actions */
+.wpvn-filter-actions {
+    display: flex;
+    gap: 12px;
+    align-items: end;
+}
+
+.wpvn-btn-filter {
+    padding: 8px 16px;
+    font-size: 14px;    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    height: fit-content;
+}
+
+.wpvn-btn-filter.primary {
+    background: #2271b1;
+    color: #fff;
+}
+
+.wpvn-btn-filter.secondary {
+    background: #f6f7f7;
+    color: #50575e;
+    border: 1px solid #c3c4c7;
+}
+
+/* Logs table container */
+.wpvn-logs-table-container {
+    background: #fff;
+    border: 1px solid #e1e1e1;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+/* DataTables styling */
+.wpvn-logs-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.wpvn-logs-table th,
+.wpvn-logs-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e1e1e1;
+}
+
+.wpvn-logs-table th {
+    background-color: #f6f7f7;
+    font-weight: 600;
+    color: #23282d;
+    font-size: 14px;
+}
+
+.wpvn-logs-table td {
+    font-size: 14px;
+    color: #50575e;
+}
+
+/* Log level indicators */
+.wpvn-log-level {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.wpvn-log-level.info {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+.wpvn-log-level.warning {
+    background: #fff3e0;
+    color: #f57c00;
+}
+
+.wpvn-log-level.error {
+    background: #ffebee;
+    color: #d32f2f;
+}
+
+.wpvn-log-level.debug {
+    background: #f3e5f5;
+    color: #7b1fa2;
+}
+
+/* Country flag in logs */
+.wpvn-logs-table .country-flag {
+    width: 20px;
+    height: 15px;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+/* IP address styling */
+.wpvn-ip-address {
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    background: #f6f7f7;
+    padding: 2px 6px;
+    border-radius: 3px;
+}
+
+/* User agent truncation */
+.wpvn-user-agent {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+/* Action buttons in table */
+.wpvn-table-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.wpvn-btn-small {
+    padding: 4px 8px;
+    font-size: 12px;
+    border: none;    border-radius: 3px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.wpvn-btn-view {
+    background: #2271b1;
+    color: #fff;
+}
+
+.wpvn-btn-delete {
+    background: #dc3232;
+    color: #fff;
+}
+
+/* Modal for log details */
+.wpvn-modal {
+    display: none;
+    position: fixed;
+    z-index: 100000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.wpvn-modal.open {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wpvn-modal-content {
+    background: #fff;
+    border-radius: 4px;
+    width: 90%;
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.wpvn-modal-header {
+    padding: 24px 24px 0 24px;
+    display: flex;
+    justify-content: between;
+    align-items: center;
+    border-bottom: 1px solid #e1e1e1;
+    margin-bottom: 24px;
+}
+
+.wpvn-modal-header h3 {
+    margin: 0;
+    color: #23282d;
+}
+
+.wpvn-modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #646970;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wpvn-modal-body {
+    padding: 0 24px 24px 24px;
+}
+
+/* Log details formatting */
+.wpvn-log-details {
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.wpvn-log-details .detail-group {
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e1e1e1;
+}
+
+.wpvn-log-details .detail-group:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.wpvn-log-details .detail-label {
+    font-weight: 600;
+    color: #23282d;
+    margin-bottom: 4px;
+}
+
+.wpvn-log-details .detail-value {
+    color: #50575e;
+    word-break: break-all;
+}
+
+/* Empty state */
+.wpvn-logs-empty {
+    text-align: center;
+    padding: 48px 24px;
+    color: #646970;
+}
+
+.wpvn-logs-empty .icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.wpvn-logs-empty h3 {
+    margin: 0 0 8px 0;
+    color: #50575e;
+}
+
+.wpvn-logs-empty p {
+    margin: 0;
+    font-size: 14px;
+}
+
+/* Export actions */
+.wpvn-export-actions {
+    background: #f6f7f7;
+    border-top: 1px solid #e1e1e1;
+    padding: 16px 24px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.wpvn-export-actions .label {
+    font-weight: 600;
+    color: #23282d;
+    margin-right: 8px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .wpvn-filters {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .wpvn-filter-actions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+    
+    .wpvn-logs-table th,
+    .wpvn-logs-table td {
+        padding: 8px;
+        font-size: 13px;
+    }
+    
+    .wpvn-table-actions {
+        flex-direction: column;
+        gap: 4px;
+    }
+    
+    .wpvn-modal-content {
+        width: 95%;
+        margin: 16px;
+    }
+    
+    .wpvn-modal-header,
+    .wpvn-modal-body {
+        padding: 16px;
+    }
+    
+    .wpvn-export-actions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+}

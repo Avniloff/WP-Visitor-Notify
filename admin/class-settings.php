@@ -83,11 +83,42 @@ class Settings {
             [$this, 'notifications_section_callback'],
             'wpvn_settings'
         );
-        
-        \add_settings_field(
+          \add_settings_field(
             'notification_email',
             \__('Notification Email', 'wp-visitor-notify'),
             [$this, 'notification_email_callback'],
+            'wpvn_settings',
+            'wpvn_notifications_section'
+        );
+
+        \add_settings_field(
+            'enable_new_visitor_notifications',
+            \__('New Visitor Notifications', 'wp-visitor-notify'),
+            [$this, 'enable_new_visitor_notifications_callback'],
+            'wpvn_settings',
+            'wpvn_notifications_section'
+        );
+
+        \add_settings_field(
+            'enable_threshold_notifications',
+            \__('Daily Visitor Threshold', 'wp-visitor-notify'),
+            [$this, 'enable_threshold_notifications_callback'],
+            'wpvn_settings',
+            'wpvn_notifications_section'
+        );
+
+        \add_settings_field(
+            'visitor_threshold_count',
+            \__('Threshold Count', 'wp-visitor-notify'),
+            [$this, 'visitor_threshold_count_callback'],
+            'wpvn_settings',
+            'wpvn_notifications_section'
+        );
+
+        \add_settings_field(
+            'enable_new_device_notifications',
+            \__('New Device Notifications', 'wp-visitor-notify'),
+            [$this, 'enable_new_device_notifications_callback'],
             'wpvn_settings',
             'wpvn_notifications_section'
         );
@@ -115,14 +146,30 @@ class Settings {
         $validated['exclude_admins'] = !empty($input['exclude_admins']) ? 1 : 0;
         $validated['exclude_bots'] = !empty($input['exclude_bots']) ? 1 : 0;
         $validated['notification_email'] = sanitize_email($input['notification_email'] ?? '');
-        $validated['database_cleanup_days'] = (int) ($input['database_cleanup_days'] ?? 90);
         
-        // Ensure cleanup days is reasonable (min 7, max 3650)
+        // Notification settings
+        $validated['enable_new_visitor_notifications'] = !empty($input['enable_new_visitor_notifications']) ? 1 : 0;
+        $validated['enable_threshold_notifications'] = !empty($input['enable_threshold_notifications']) ? 1 : 0;
+        $validated['visitor_threshold_count'] = (int) ($input['visitor_threshold_count'] ?? 100);
+        $validated['enable_new_device_notifications'] = !empty($input['enable_new_device_notifications']) ? 1 : 0;
+        
+        $validated['database_cleanup_days'] = (int) ($input['database_cleanup_days'] ?? 90);
+          // Ensure cleanup days is reasonable (min 7, max 3650)
         if ($validated['database_cleanup_days'] < 7) {
             $validated['database_cleanup_days'] = 7;
         } elseif ($validated['database_cleanup_days'] > 3650) {
             $validated['database_cleanup_days'] = 3650;
         }
+        
+        // Ensure threshold count is reasonable (min 1, max 10000)
+        if ($validated['visitor_threshold_count'] < 1) {
+            $validated['visitor_threshold_count'] = 1;
+        } elseif ($validated['visitor_threshold_count'] > 10000) {
+            $validated['visitor_threshold_count'] = 10000;
+        }
+        
+        // Sync notification settings with database rules
+        $this->sync_notification_rules($validated);
         
         return $validated;
     }    // Section callbacks
@@ -165,9 +212,27 @@ class Settings {
     public function exclude_bots_callback(): void {
         $options = \get_option('wpvn_settings', []);
         // Will be handled in template
+    }    public function notification_email_callback(): void {
+        $options = \get_option('wpvn_settings', []);
+        // Will be handled in template
     }
 
-    public function notification_email_callback(): void {
+    public function enable_new_visitor_notifications_callback(): void {
+        $options = \get_option('wpvn_settings', []);
+        // Will be handled in template
+    }
+
+    public function enable_threshold_notifications_callback(): void {
+        $options = \get_option('wpvn_settings', []);
+        // Will be handled in template
+    }
+
+    public function visitor_threshold_count_callback(): void {
+        $options = \get_option('wpvn_settings', []);
+        // Will be handled in template
+    }
+
+    public function enable_new_device_notifications_callback(): void {
         $options = \get_option('wpvn_settings', []);
         // Will be handled in template
     }
@@ -181,14 +246,17 @@ class Settings {
      * Get default settings values.
      *
      * @return array<string, mixed> Default settings
-     */
-    public function get_default_settings(): array {
+     */    public function get_default_settings(): array {
         return [
             'tracking_enabled' => 1,
             'hash_ip' => 1,
             'exclude_admins' => 1,
             'exclude_bots' => 1,
             'notification_email' => \get_option('admin_email', ''),
+            'enable_new_visitor_notifications' => 0,
+            'enable_threshold_notifications' => 0,
+            'visitor_threshold_count' => 100,
+            'enable_new_device_notifications' => 0,
             'database_cleanup_days' => 90
         ];
     }
@@ -277,11 +345,72 @@ class Settings {
             return true;
         } catch (\Exception $e) {
             return false;
-        }
-    }
+        }    }
 
-    public function render(): void {
-        // Template will be included here when created
-        // For now, return empty - no HTML output
+    /**
+     * Sync notification settings with database rules
+     *
+     * @param array $settings Current settings
+     * @return void
+     */
+    public function sync_notification_rules(array $settings): void {
+        global $wpdb;
+        
+        $rules_table = $wpdb->prefix . 'wpvn_notification_rules';
+        
+        // Update new visitor notifications
+        $wpdb->update(
+            $rules_table,
+            ['status' => $settings['enable_new_visitor_notifications'] ? 1 : 0],
+            ['event_type' => 'new_visitor'],
+            ['%d'],
+            ['%s']
+        );
+        
+        // Update threshold notifications
+        $wpdb->update(
+            $rules_table,
+            [
+                'status' => $settings['enable_threshold_notifications'] ? 1 : 0,
+                'threshold' => (int) $settings['visitor_threshold_count']
+            ],
+            ['event_type' => 'visitor_threshold'],
+            ['%d', '%d'],
+            ['%s']
+        );
+        
+        // Update new device notifications
+        $wpdb->update(
+            $rules_table,
+            ['status' => $settings['enable_new_device_notifications'] ? 1 : 0],
+            ['event_type' => 'new_device'],
+            ['%d'],
+            ['%s']
+        );
+          // Update email for all rules
+        if (!empty($settings['notification_email'])) {
+            $wpdb->query(
+                $wpdb->prepare(
+                    "UPDATE {$rules_table} SET email = %s",
+                    sanitize_email($settings['notification_email'])
+                )
+            );
+        }
+    }    public function render(): void {        // Get current settings
+        $settings = get_option('wpvn_settings', []);
+        
+        // Set template variables
+        $template_vars = [
+            'settings' => $settings,
+            'settings_url' => admin_url('admin.php?page=wp-visitor-notify-settings'),
+            'nonce_field' => wp_nonce_field('wpvn_settings_nonce', 'wpvn_settings_nonce', true, false)
+        ];
+        
+        // Include header
+        include WPVN_PLUGIN_PATH . 'admin/templates/header.php';
+        
+        // Include settings template
+        extract($template_vars);
+        include WPVN_PLUGIN_PATH . 'admin/templates/settings.php';
     }
 }

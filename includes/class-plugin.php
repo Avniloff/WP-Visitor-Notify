@@ -21,7 +21,11 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+// Load required classes
+require_once __DIR__ . '/class-notification.php';
+
 use WPVN\Admin\Admin as AdminInterface;
+use WPVN\Notification;
 
 /**
  * Main Plugin class
@@ -81,15 +85,21 @@ class Plugin {    /**
      * @since 1.0.0
      * @var Tracker|null
      */
-    private ?Tracker $tracker = null;
-
-    /**
+    private ?Tracker $tracker = null;    /**
      * Analytics engine
      *
      * @since 1.0.0
      * @var Analytics|null
      */
     private ?Analytics $analytics = null;
+
+    /**
+     * Notification system
+     *
+     * @since 1.0.0
+     * @var Notification|null
+     */
+    private ?Notification $notification = null;
 
     /**
      * Admin interface controller
@@ -152,13 +162,13 @@ class Plugin {    /**
             return;
         }
 
-        try {
-            // Initialize core components in dependency order
+        try {            // Initialize core components in dependency order
             $this->init_logger();
             $this->init_database();
             $this->init_detector();
             $this->init_tracker();
             $this->init_analytics();
+            $this->init_notification();
             $this->init_admin();
 
             // Set up WordPress hooks
@@ -169,13 +179,11 @@ class Plugin {    /**
             $this->load_textdomain();
 
             // Mark as initialized
-            $this->is_initialized = true;
-
-            // Log successful initialization
+            $this->is_initialized = true;            // Log successful initialization
             $this->logger->log('Plugin initialized successfully', 'info', [
                 'version' => WPVN_VERSION,
                 'php_version' => \PHP_VERSION,
-                'components_loaded' => ['logger', 'database', 'detector', 'tracker', 'analytics', 'admin']
+                'components_loaded' => ['logger', 'database', 'detector', 'tracker', 'analytics', 'notification', 'admin']
             ]);
 
         } catch (\Exception $e) {
@@ -247,14 +255,21 @@ class Plugin {    /**
         if (null === $this->tracker && $this->database && $this->detector && $this->logger) {
             $this->tracker = new Tracker($this->database, $this->detector, $this->logger);
         }
-    }
-
-    /**
+    }    /**
      * Initialize analytics engine
      */
     private function init_analytics(): void {
         if (null === $this->analytics && $this->database) {
             $this->analytics = new Analytics($this->database);
+        }
+    }
+
+    /**
+     * Initialize notification system
+     */
+    private function init_notification(): void {
+        if (null === $this->notification && $this->database && $this->logger) {
+            $this->notification = new Notification($this->database, $this->logger);
         }
     }
 
@@ -307,12 +322,17 @@ class Plugin {    /**
      *
      * @since 1.0.0
      * @return void
-     */
-    public function on_activation(): void {
+     */    public function on_activation(): void {
         try {
             // Ensure database is initialized
             if (null === $this->database) {
                 $this->init_database();
+            }
+
+            // Ensure notification system is initialized
+            if (null === $this->notification) {
+                $this->init_logger(); // Need logger first
+                $this->init_notification();
             }
 
             // Create default options (simple basic settings)
@@ -322,8 +342,13 @@ class Plugin {    /**
             ];
             \add_option(self::PLUGIN_SLUG . '_options', $default_options);
 
+            // Create default notification rules
+            if ($this->notification) {
+                $this->notification->create_default_rules();
+            }
+
             // Log successful activation (use error_log during activation as logger may not be initialized)
-            \error_log('[' . \date('Y-m-d H:i:s') . '] WPVN.INFO: Plugin activated successfully | Context: {"version":"' . WPVN_VERSION . '","options_created":true}');
+            \error_log('[' . \date('Y-m-d H:i:s') . '] WPVN.INFO: Plugin activated successfully | Context: {"version":"' . WPVN_VERSION . '","options_created":true,"notification_rules_created":true}');
         } catch (\Exception $e) {
             \error_log('WPVN Plugin activation failed: ' . $e->getMessage());
             \wp_die('Plugin activation failed: ' . $e->getMessage());
@@ -373,9 +398,7 @@ class Plugin {    /**
             default:
                 return null;
         }
-    }
-
-    /**
+    }    /**
      * Get the logger instance
      *
      * @since 1.0.0
@@ -386,6 +409,16 @@ class Plugin {    /**
             $this->init_logger();
         }
         return $this->logger;
+    }
+
+    /**
+     * Get the notification instance
+     *
+     * @since 1.0.0
+     * @return Notification|null The notification instance
+     */
+    public function get_notification(): ?Notification {
+        return $this->notification;
     }
 
     /**
@@ -425,9 +458,7 @@ class Plugin {    /**
      */
     public function __wakeup() {
         throw new \Exception('Cannot unserialize singleton');
-    }
-
-    /**
+    }    /**
      * Initialize the plugin with injected dependencies (for testing only)
      *
      * This method allows dependency injection for testing purposes.
@@ -454,6 +485,7 @@ class Plugin {    /**
         $this->logger = $logger;
         $this->tracker = $tracker;
         $this->analytics = new Analytics($this->database);
+        $this->notification = new Notification($this->database, $this->logger);
         $this->admin = new AdminInterface($this, $this->analytics);
 
         $this->is_initialized = true;

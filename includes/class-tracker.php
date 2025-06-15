@@ -41,6 +41,9 @@ class Tracker {
             $session_id = $this->get_or_create_session();
             if ($session_id > 0) {
                 $this->record_page_view($session_id);
+                
+                // Send notification if enabled
+                $this->send_visitor_notification($session_id);
             }
         } catch (\Exception $e) {
             $this->logger->error('Tracking failed: ' . $e->getMessage(), [], 'tracker');
@@ -114,9 +117,67 @@ class Tracker {
             ['%d','%s','%s','%s']
         );
         $this->logger->debug('Page view recorded', ['session' => $session_id, 'url' => $url], 'tracker');
+    }    private function get_ip(): string {
+        return $_SERVER['REMOTE_ADDR'] ?? '';
     }
 
-    private function get_ip(): string {
-        return $_SERVER['REMOTE_ADDR'] ?? '';
+    /**
+     * Send visitor notification
+     *
+     * @param int $session_id Session ID
+     * @return void
+     */
+    private function send_visitor_notification(int $session_id): void {
+        try {
+            // Get plugin instance to access notification system
+            $plugin = Plugin::get_instance();
+            $notification = $plugin->get_notification();
+            
+            if (!$notification) {
+                return; // Notification system not available
+            }
+            
+            // Get session data for notification
+            $session_data = $this->get_session_data($session_id);
+            if (!$session_data) {
+                return;
+            }
+            
+            // Prepare visitor data for notification
+            $visitor_data = [
+                'session_id' => $session_id,
+                'device_type' => $session_data['device_type'] ?? '',
+                'browser' => $session_data['browser'] ?? '',
+                'os' => $session_data['os'] ?? '',
+                'url' => $_SERVER['REQUEST_URI'] ?? '',
+                'timestamp' => current_time('mysql', true)
+            ];
+            
+            // Send notification
+            $notification->send_visitor_notification($visitor_data);
+            
+        } catch (\Exception $e) {
+            $this->logger->error('Failed to send visitor notification: ' . $e->getMessage(), [], 'tracker');
+        }
+    }
+
+    /**
+     * Get session data by ID
+     *
+     * @param int $session_id Session ID
+     * @return array|null Session data or null if not found
+     */
+    private function get_session_data(int $session_id): ?array {
+        $sessions_table = $this->db->get_tables()['sessions'];
+        
+        $session = $this->db->get_wpdb()->get_row(
+            $this->db->get_wpdb()->prepare(
+                "SELECT * FROM {$sessions_table} WHERE id = %d LIMIT 1",
+                $session_id
+            ),
+            ARRAY_A
+        );
+        
+        return $session ?: null;
     }
 }

@@ -177,11 +177,10 @@ class Logger {
      * Get the preferred log file path
      *
      * @return string|null Path to log file or null if none available
-     */
-    public function get_log_file(): ?string {
+     */    public function get_log_file(): ?string {
         $log_sources = [
-            WP_CONTENT_DIR . '/debug.log',
-            ABSPATH . 'wp-content/debug.log',
+            \WP_CONTENT_DIR . '/debug.log',
+            \ABSPATH . 'wp-content/debug.log',
             ini_get('error_log'),
             ABSPATH . 'error_log',
             ABSPATH . 'error.log'

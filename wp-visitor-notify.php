@@ -35,6 +35,9 @@ if (!defined('WPVN_PLUGIN_FILE')) {
 if (!defined('WPVN_PLUGIN_DIR')) {
     define('WPVN_PLUGIN_DIR', plugin_dir_path(__FILE__));
 }
+if (!defined('WPVN_PLUGIN_PATH')) {
+    define('WPVN_PLUGIN_PATH', plugin_dir_path(__FILE__));
+}
 if (!defined('WPVN_PLUGIN_URL')) {
     define('WPVN_PLUGIN_URL', plugin_dir_url(__FILE__));
 }

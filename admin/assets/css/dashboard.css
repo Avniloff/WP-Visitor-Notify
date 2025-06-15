@@ -1,0 +1,172 @@
+/**
+ * Dashboard-specific styles for WP Visitor Notify
+ * Contains styles for analytics cards, charts, and statistics
+ */
+
+/* Dashboard cards layout */
+.wpvn-dashboard .wpvn-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+.wpvn-card {
+    background: #fff;
+    border: 1px solid #e1e1e1;
+    border-radius: 4px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.wpvn-card h3 {
+    color: #23282d;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+}
+
+.wpvn-card .metric {
+    font-size: 32px;
+    font-weight: 700;
+    color: #2271b1;
+    line-height: 1.2;
+    margin-bottom: 8px;
+}
+
+.wpvn-card .description {
+    color: #646970;
+    font-size: 14px;
+    margin: 0;
+}
+
+/* Chart container */
+.wpvn-chart-container {
+    background: #fff;
+    border: 1px solid #e1e1e1;
+    border-radius: 4px;
+    padding: 24px;
+    margin-bottom: 32px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.wpvn-chart-container h3 {
+    margin-top: 0;
+    margin-bottom: 24px;
+    color: #23282d;
+}
+
+.wpvn-chart {
+    position: relative;
+    width: 100%;
+    height: 400px;
+}
+
+/* Recent visitors table */
+.wpvn-recent-visitors {
+    background: #fff;
+    border: 1px solid #e1e1e1;
+    border-radius: 4px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.wpvn-recent-visitors h3 {
+    margin-top: 0;
+    margin-bottom: 24px;
+    color: #23282d;
+}
+
+.wpvn-visitors-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 16px;
+}
+
+.wpvn-visitors-table th,
+.wpvn-visitors-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e1e1e1;
+}
+
+.wpvn-visitors-table th {
+    background-color: #f6f7f7;
+    font-weight: 600;
+    color: #23282d;
+}
+
+.wpvn-visitors-table .country-flag {
+    width: 20px;
+    height: 15px;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+/* Loading state */
+.wpvn-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    color: #646970;
+}
+
+.wpvn-loading::before {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 20px;    border: 2px solid #e1e1e1;
+    border-top: 2px solid #2271b1;
+    border-radius: 50%;
+    margin-right: 12px;
+}
+
+
+
+/* Error state */
+.wpvn-error {
+    background: #fff;
+    border: 1px solid #dc3232;
+    border-radius: 4px;
+    padding: 16px;
+    color: #dc3232;
+    margin-bottom: 24px;
+}
+
+/* Success state */
+.wpvn-success {
+    background: #fff;
+    border: 1px solid #00a32a;
+    border-radius: 4px;
+    padding: 16px;
+    color: #00a32a;
+    margin-bottom: 24px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .wpvn-dashboard .wpvn-cards {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+    
+    .wpvn-card {
+        padding: 16px;
+    }
+    
+    .wpvn-card .metric {
+        font-size: 24px;
+    }
+    
+    .wpvn-chart {
+        height: 300px;
+    }
+    
+    .wpvn-visitors-table th,
+    .wpvn-visitors-table td {
+        padding: 8px;
+        font-size: 14px;
+    }
+}
