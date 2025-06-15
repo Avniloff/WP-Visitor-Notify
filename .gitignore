@@ -15,14 +15,6 @@ wp-content/debug.log
 error_log
 error.log
 
-# Development Files
-ARCHITECTURE.md
-development.md
-README-dev.md
-CHANGELOG.md
-TODO.md
-NOTES.md
-
 # IDE/Editor Files
 .vscode/
 .idea/
@@ -126,8 +118,9 @@ xdebug.ini.local
 .htaccess.local
 apache-config.local.conf
 
-# Testing Files and Documentation
+# Testing Files and Documentation  
 tests/
+test-runner.php
 TEST_ERRORS.md
 phpunit.xml
 .phpunit.result.cache
@@ -135,6 +128,10 @@ phpunit.xml
 # Development Documentation
 ARCHITECTURE.md
 development.md
+TODO.md
+README-dev.md
+CHANGELOG.md
+NOTES.md
 
 # Docker Development Files
 docker-compose.yml

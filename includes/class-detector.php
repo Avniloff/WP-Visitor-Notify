@@ -30,7 +30,70 @@ class Detector {
             return 'tablet';
         }
         return 'desktop';
-    }    /**
+    }
+
+    /**
+     * Determine if user agent belongs to a bot/crawler.
+     *
+     * @param string $ua User agent string.
+     * @return bool True if bot, false otherwise.
+     */
+    public function is_bot(string $ua): bool {
+        $ua = strtolower($ua);
+        
+        // Common bot signatures
+        $bot_patterns = [
+            'bot',
+            'crawler',
+            'spider',
+            'scraper',
+            'googlebot',
+            'bingbot',
+            'slurp',          // Yahoo bot
+            'duckduckbot',
+            'baiduspider',
+            'yandexbot',
+            'facebookexternalhit',
+            'twitterbot',
+            'linkedinbot',
+            'whatsapp',
+            'telegrambot',
+            'discordbot',
+            'applebot',
+            'msnbot',
+            'ia_archiver',    // Internet Archive
+            'wget',
+            'curl',
+            'python-requests',
+            'scrapy',
+            'node-fetch',
+            'postman',
+            'insomnia',
+            'pingdom',
+            'gtmetrix',
+            'pagespeed',
+            'lighthouse',
+            'headlesschrome',
+            'phantomjs',
+            'selenium',
+            'webdriver'
+        ];
+        
+        foreach ($bot_patterns as $pattern) {
+            if (strpos($ua, $pattern) !== false) {
+                return true;
+            }
+        }
+        
+        // Check for empty or very short user agent (often bots)
+        if (empty($ua) || strlen($ua) < 10) {
+            return true;
+        }
+        
+        return false;
+    }
+
+    /**
      * Detect browser name from user agent.
      *
      * @param string $ua User agent string.

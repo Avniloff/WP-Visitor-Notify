@@ -180,4 +180,61 @@ class Analytics {
         );
         return $this->db->get_wpdb()->get_results($sql, ARRAY_A) ?: [];
     }
+
+    /**
+     * Get total number of visits for a given period.
+     *
+     * @param int $days Number of days to analyze (default: 30)
+     * @return int Total number of visits
+     */
+    public function get_total_visits(int $days = 30): int {
+        $sessions_table = $this->db->get_tables()['sessions'];
+        $sql = $this->db->get_wpdb()->prepare(
+            "SELECT COUNT(DISTINCT id) as total 
+             FROM {$sessions_table} 
+             WHERE created_at >= DATE_SUB(UTC_TIMESTAMP(), INTERVAL %d DAY)",
+            $days
+        );
+        $result = $this->db->get_wpdb()->get_var($sql);
+        return (int) ($result ?: 0);
+    }
+
+    /**
+     * Get number of unique visitors for a given period.
+     *
+     * @param int $days Number of days to analyze (default: 30)
+     * @return int Number of unique visitors
+     */
+    public function get_unique_visitors(int $days = 30): int {
+        $sessions_table = $this->db->get_tables()['sessions'];
+        $sql = $this->db->get_wpdb()->prepare(
+            "SELECT COUNT(DISTINCT ip_address) as unique_visitors 
+             FROM {$sessions_table} 
+             WHERE created_at >= DATE_SUB(UTC_TIMESTAMP(), INTERVAL %d DAY)
+             AND ip_address IS NOT NULL 
+             AND ip_address != ''",
+            $days
+        );
+        $result = $this->db->get_wpdb()->get_var($sql);
+        return (int) ($result ?: 0);
+    }
+
+    /**
+     * Get average session duration for a given period.
+     *
+     * @param int $days Number of days to analyze (default: 30)
+     * @return float Average session duration in minutes
+     */
+    public function get_session_duration(int $days = 30): float {
+        $sessions_table = $this->db->get_tables()['sessions'];
+        $sql = $this->db->get_wpdb()->prepare(
+            "SELECT AVG(TIMESTAMPDIFF(MINUTE, created_at, last_activity)) as avg_duration 
+             FROM {$sessions_table} 
+             WHERE created_at >= DATE_SUB(UTC_TIMESTAMP(), INTERVAL %d DAY)
+             AND TIMESTAMPDIFF(MINUTE, created_at, last_activity) > 0",
+            $days
+        );
+        $result = $this->db->get_wpdb()->get_var($sql);
+        return (float) ($result ?: 0);
+    }
 }
